@@ -52,7 +52,7 @@ float Perlin3D(float3 P)
 	float4 grad_x1 = hashx1 - 0.49999;
 	float4 grad_y1 = hashy1 - 0.49999;
 	float4 grad_z1 = hashz1 - 0.49999;
-	//grad_results_0 = dot(a,b) / |b| = |a|Cos() = [-sqrt(3) ~ sqrt(3)]
+	//grad_results_0 = dot(a,b) / |b| = |a|Cos() = [-2 ~ 2]
 	//a是頂點到點的向量
 	//計算各頂點到P的向量與梯度點積
 	float4 grad_results_0 =
@@ -72,8 +72,8 @@ float Perlin3D(float3 P)
 	float4 res0 = lerp(grad_results_0, grad_results_1, blend.z);
 	float2 res1 = lerp(res0.xy, res0.zw, blend.y);
 	float final = lerp(res1.x, res1.y, blend.x);
-	//final 最後是 [-sqrt(3) ~ sqrt(3)]
-	final = (final * rsqrt(3) + 1)/2;
+	//final 最後是 [-1 ~ 1]
+	final = final /2;
 	return final;
 }
 
