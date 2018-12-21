@@ -1,4 +1,4 @@
-﻿Shader "Custom/Ghost" 
+Shader "Custom/Ghost" 
 {
 	Properties 
 	{
@@ -36,7 +36,7 @@
 			#pragma fragment frag    
 			#pragma geometry geom
 			#include "UnityCG.cginc"
-			#include "Noise.cginc"
+			#include "Assets/Noise.cginc"
 
 			float4 _MainColor;
 			float _Alpha;
