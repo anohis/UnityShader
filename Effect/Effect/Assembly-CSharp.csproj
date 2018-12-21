@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Assets\Camera\CameraFollow.cs" />
     <Compile Include="Assets\Effect\Block\BlockEffect.cs" />
+    <Compile Include="Assets\Effect\DOF\DofEffect.cs" />
     <Compile Include="Assets\Effect\Ghost\GhostEffect.cs" />
     <Compile Include="Assets\Input\InputHandler.cs" />
     <Compile Include="Assets\Input\InputReceiver.cs" />
@@ -94,6 +95,7 @@
     <None Include="Assets\Effect\Block\Blocking.shader" />
     <None Include="Assets\UnityChan\Stage\Shader\AlphaMask.shader" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_eyelash_blend.shader" />
+    <None Include="Assets\Effect\DOF\Dof.shader" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_hada.shader" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_hada_blend.shader" />
     <None Include="Assets\Effect\Dissolving\Dissolving.shader" />
