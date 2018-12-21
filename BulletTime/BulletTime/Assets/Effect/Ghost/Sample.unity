@@ -433,5 +433,5 @@ MonoBehaviour:
   DistanceAway: 10
   BasePos: {x: 0, y: 0, z: 0}
   NewRotate: {x: 0, y: 0, z: 0}
-  RotateMin: {x: 0, y: 0, z: 0}
+  RotateMin: {x: -360, y: -360, z: -360}
   RotateMax: {x: 360, y: 360, z: 360}

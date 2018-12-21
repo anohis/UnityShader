@@ -293,8 +293,8 @@ MonoBehaviour:
   DistanceAway: 1
   BasePos: {x: 0, y: 0, z: 0}
   NewRotate: {x: 0, y: 0, z: 0}
-  RotateMin: {x: 0, y: 0, z: 0}
-  RotateMax: {x: 350, y: 350, z: 350}
+  RotateMin: {x: -360, y: -360, z: -360}
+  RotateMax: {x: 360, y: 360, z: 360}
 --- !u!1 &1692333554
 GameObject:
   m_ObjectHideFlags: 0
