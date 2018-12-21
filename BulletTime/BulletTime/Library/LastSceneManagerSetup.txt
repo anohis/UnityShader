@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Effect/Ghost/Sample.unity
+- path: Assets/Effect/RimLight/Sample.unity
   isLoaded: 1
   isActive: 1
