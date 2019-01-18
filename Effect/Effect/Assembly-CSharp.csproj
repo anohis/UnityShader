@@ -92,13 +92,13 @@
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_hair_ds.shader" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_akarami_blend.shader" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_hair.shader" />
-    <None Include="Assets\Effect\Block\Blocking.shader" />
     <None Include="Assets\UnityChan\Stage\Shader\AlphaMask.shader" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_eyelash_blend.shader" />
     <None Include="Assets\Effect\DOF\Dof.shader" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_hada.shader" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_hada_blend.shader" />
     <None Include="Assets\Effect\Dissolving\Dissolving.shader" />
+    <None Include="Assets\Effect\Block\Blocking.shader" />
     <None Include="Assets\Effect\Ghost\Ghost.shader" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>G:/FootballAI/UnityShader/Effect/Effect/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>

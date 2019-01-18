@@ -56,15 +56,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BlurCenterPower: 0
-    - _BlurPower: 12.63
+    - _BlurPower: 11.62
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _FocalDistance: 1.5
+    - _FocalDistance: 1.4999995
+    - _FocalRange: 0.752
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _MaxBlurDistance: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1

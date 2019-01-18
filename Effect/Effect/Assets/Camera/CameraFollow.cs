@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ToolKit.Math;
 using UnityEngine;
 
-namespace Camera
+namespace CameraKit
 {
     public class CameraFollow : MonoBehaviour
     {

@@ -1,182 +1,275 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 
-namespace Effect.Block
+namespace RPG2.Effect
 {
 	public class BlockEffect : MonoBehaviour
 	{
-		public bool IsAppear = true;
-
-		[SerializeField]
-		private Renderer[] _renderers;
-		[SerializeField]
-		private float _blockDuringTime = 1;
-		[SerializeField]
-		private float _beamDuringTime = 1;
-		[SerializeField]
-		private Color _color;
-		[SerializeField]
-		private float _maxBlockClip = 1;
-
-		[SerializeField]
-		private UnityEvent _OnComplete;
-
-		private float _blockTime = 0;
-		private float _beamTime = 0;
-		private bool _isComplete = false;
-
-		private void Start()
+		private class State
 		{
-			Restart();
+			public event Func<bool> OnUpdate;
+			public event Action OnEnter;
+
+			private bool _isFirst = true;
+
+			public bool Update()
+			{
+				if (_isFirst && OnEnter!=null)
+				{
+					_isFirst = false;
+					OnEnter();
+				}
+				if (OnUpdate != null)
+				{
+					return OnUpdate();
+				}
+				return false;
+			}
 		}
 
+		public bool IsReverse;
+
+		[Header("Mesh")]
+		public SkinnedMeshRenderer[] TargetSkinRender;
+		public MeshFilter[] TargetMeshFilter;
+
+		[Header("Time")]
+		public float BlockingTime;
+		public float BeamTime;
+
+		[Header("Material")]
+		public Shader BlockShader;
+		public Texture Texture;
+		public float _BlockHeight;
+		[Range(0, 1)] public float _BlockUnit = 0.05f;
+		[Range(0, 1)] public float _BlockOffset = 0.001f;
+		public Color _BlockColor = Color.white;
+		public Vector3 _BlockCenterOffset;
+		public Vector3 _BeamCenterOffset;
+		public float _BeamRadius = 4;
+		[Range(0, 1)] public float _BeamMinShowRate = 0.7f;
+		[Range(0, 1)] public float _BeamMaxShowRate = 0.9f;
+		[Range(0, 1)] public float _BeamCount = 0.9f;
+		public Vector4 _BeamDirection = new Vector4(0,3,0,0);
+		public Vector4 _BeamStretchPower = new Vector4(-1,-20,-1,1);
+
+		public UnityEvent OnComplete;
+
+		private Material EffectMaterial
+		{
+			get
+			{
+				if (_material == null)
+				{
+					_material = new Material(BlockShader);
+				}
+				return _material;
+			}
+		}
+		private Material _material;
+		private float _blockingTime = 0;
+		private float _beamTime = 0;
+		private Queue<State> _stateQueue = new Queue<State>();
+
+		private Dictionary<SkinnedMeshRenderer, Material[]> _skinnedMeshMaterials = new Dictionary<SkinnedMeshRenderer, Material[]>();
+
+		#region MonoBehaviour
+		private void Awake()
+		{
+			foreach (SkinnedMeshRenderer skinnedMeshRenderer in TargetSkinRender)
+			{
+				_skinnedMeshMaterials.Add(skinnedMeshRenderer, skinnedMeshRenderer.materials);
+			}
+		}
+		private void OnEnable()
+		{
+			ReStart();
+			InitializeMaterial();
+		}
 		private void Update()
 		{
-			if (CheckBlockTime() || CheckBeamTime())
+			if (_stateQueue.Count == 0)
 			{
-				if (IsAppear)
+				enabled = false;
+				OnComplete.Invoke();
+				return;
+			}
+
+			State state = _stateQueue.Peek();
+			if(state.Update() == false)
+			{
+				_stateQueue.Dequeue();
+			}
+
+			foreach (SkinnedMeshRenderer skinnedMeshRenderer in TargetSkinRender)
+			{
+				Mesh mesh = new Mesh();
+				skinnedMeshRenderer.BakeMesh(mesh);
+				for (int subMeshIndex = 0; subMeshIndex < mesh.subMeshCount; subMeshIndex++)
 				{
-					Appear();
-				}
-				else
-				{
-					Disappear();
+					Graphics.DrawMesh(
+						mesh,
+						Matrix4x4.TRS(skinnedMeshRenderer.transform.position, skinnedMeshRenderer.transform.rotation, skinnedMeshRenderer.transform.lossyScale),
+						EffectMaterial,
+						gameObject.layer,
+						Camera.main,
+						subMeshIndex
+						);
 				}
 			}
-			else if (_isComplete == false)
+			foreach (MeshFilter meshFilter in TargetMeshFilter)
 			{
-				_isComplete = true;
-				_OnComplete.Invoke();
-			}
-		}
-
-		#region public custom func
-		public void DestroyObject()
-		{
-			Destroy(gameObject);
-		}
-		public void Restart()
-		{
-			_isComplete = false;
-
-			_blockTime = 0;
-			_beamTime = 0;
-
-			foreach (Renderer renderer in _renderers)
-			{
-				if (IsAppear)
-				{
-					renderer.material.SetFloat("_BeamStep", 1);
-					renderer.material.SetFloat("_BlockClip", GetBlockClip(1));
-					renderer.material.SetColor("_BlockColor", _color);
-				}
-				else
-				{
-					renderer.material.SetFloat("_BeamStep", 0);
-					renderer.material.SetFloat("_BlockClip", GetBlockClip(0));
-					renderer.material.SetColor("_BlockColor", new Color(0, 0, 0, 0));
-				}
+				Graphics.DrawMesh(
+					meshFilter.sharedMesh,
+					Matrix4x4.TRS(meshFilter.transform.position, meshFilter.transform.rotation, meshFilter.transform.lossyScale),
+					EffectMaterial,
+					gameObject.layer
+					);
 			}
 		}
 		#endregion
 
-
-		#region private custom func
-		private bool CheckBlockTime()
+		#region public func
+		public void ReStart()
 		{
-			return _blockTime < _blockDuringTime;
-		}
-		private bool CheckBeamTime()
-		{
-			return _beamTime < _beamDuringTime;
-		}
+			enabled = true;
 
-		private float GetRate(float value,float max)
-		{
-			float rate = value / max;
-
-			if (rate < 0)
+			_stateQueue.Clear();
+			if (IsReverse)
 			{
-				rate = 0;
+				_blockingTime = BlockingTime;
+				_beamTime = BeamTime;
+
+				State state = new State();
+				state.OnEnter += () =>
+				{
+					SetOtherMaterialEnable(false);
+				};
+				state.OnUpdate += () =>
+				{
+					if (_beamTime > 0)
+					{
+						_beamTime -= Time.deltaTime;
+						CalcBeamStep();
+						return true;
+					}
+					return false;
+				};
+				_stateQueue.Enqueue(state);
+
+				state = new State();
+				state.OnEnter += () =>
+				{
+					SetOtherMaterialEnable(true);
+				};
+				state.OnUpdate += () =>
+				{
+					if (_blockingTime > 0)
+					{
+						_blockingTime -= Time.deltaTime;
+						CalcBlockStep();
+						return true;
+					}
+					return false;
+				};
+				_stateQueue.Enqueue(state);
 			}
-			else if (rate > 1)
+			else
 			{
-				rate = 1;
+				_blockingTime = 0;
+				_beamTime = 0;
+
+				State state = new State();
+				state.OnEnter += () =>
+				{
+					SetOtherMaterialEnable(true);
+				};
+				state.OnUpdate += () =>
+				{
+					if (_blockingTime < BlockingTime)
+					{
+						_blockingTime += Time.deltaTime;
+						CalcBlockStep();
+						return true;
+					}
+					return false;
+				};
+				_stateQueue.Enqueue(state);
+
+				state = new State();
+				state.OnEnter += () =>
+				{
+					SetOtherMaterialEnable(false);
+				};
+				state.OnUpdate += () =>
+				{
+					if (_beamTime < BeamTime)
+					{
+						_beamTime += Time.deltaTime;
+						CalcBeamStep();
+						return true;
+					}
+					return false;
+				};
+				_stateQueue.Enqueue(state);
 			}
 
-			return rate;
+			CalcBlockStep();
+			CalcBeamStep();
 		}
-		private float GetBlockRate()
+		#endregion
+
+		#region private func
+		private void CalcBlockStep()
 		{
-			return GetRate(_blockTime, _blockDuringTime);
+			float rate = Mathf.Clamp(_blockingTime / BlockingTime, 0, 1);
+			EffectMaterial.SetFloat("_BlockStep", rate);
 		}
-		private float GetBeamRate()
+		private void CalcBeamStep()
 		{
-			return GetRate(_beamTime, _beamDuringTime);
-		}
-		private float GetBlockClip(float rate)
-		{
-			return _maxBlockClip * (2 * rate - 1);
+			float rate = Mathf.Clamp(_beamTime / BeamTime, 0, 1);
+			EffectMaterial.SetFloat("_BeamStep", rate);
 		}
 
-		private void SetBlockClip(float value)
+		private void InitializeMaterial()
 		{
-			foreach (Renderer renderer in _renderers)
-			{
-				renderer.material.SetFloat("_BlockClip", value);
-			}
+			EffectMaterial.SetTexture("_MainTex", Texture);
+			CalcBlockStep();
+			CalcBeamStep();
+			EffectMaterial.SetFloat("_BlockHeight", _BlockHeight);
+			EffectMaterial.SetFloat("_BlockUnit", _BlockUnit);
+			EffectMaterial.SetFloat("_BlockOffset", _BlockOffset);
+			EffectMaterial.SetVector("_BlockBasePosition", transform.position + _BlockCenterOffset);
+			EffectMaterial.SetColor("_BlockColor", _BlockColor);
+			EffectMaterial.SetFloat("_BeamRadius", _BeamRadius);
+			EffectMaterial.SetFloat("_BeamMinShowRate", _BeamMinShowRate);
+			EffectMaterial.SetFloat("_BeamMaxShowRate", _BeamMaxShowRate);
+			EffectMaterial.SetFloat("_BeamCount", _BeamCount);
+			EffectMaterial.SetVector("_BeamCenterPosition", transform.position + _BeamCenterOffset);
+			EffectMaterial.SetVector("_BeamDirection", _BeamDirection);
+			EffectMaterial.SetVector("_BeamStretchPower", _BeamStretchPower);
 		}
-		private void SetBlockColor(float rate)
+		private void SetOtherMaterialEnable(bool isEnable)
 		{
-			foreach (Renderer renderer in _renderers)
+			foreach (SkinnedMeshRenderer skinnedMeshRenderer in TargetSkinRender)
 			{
-				renderer.material.SetColor("_BlockColor", _color * rate);
+				if (isEnable)
+				{
+					skinnedMeshRenderer.materials = _skinnedMeshMaterials[skinnedMeshRenderer];
+				}
+				else
+				{
+					skinnedMeshRenderer.materials = new Material[0];
+				}
 			}
-		}
-		private void SetBeamStep(float value)
-		{
-			foreach (Renderer renderer in _renderers)
-			{
-				renderer.material.SetFloat("_BeamStep", value);
-			}
-		}
 
-		private void Disappear()
-		{
-			if (CheckBlockTime())
+			foreach (MeshFilter meshFilter in TargetMeshFilter)
 			{
-				float rate = GetBlockRate();
-				SetBlockClip(GetBlockClip(rate));
-				SetBlockColor(rate);
-
-				_blockTime += Time.deltaTime;
-			}
-			else if (CheckBeamTime())
-			{
-				float rate = GetBeamRate();
-				SetBeamStep(rate);
-
-				_beamTime += Time.deltaTime;
-			}
-		}
-		private void Appear()
-		{
-			if (CheckBeamTime())
-			{
-				float rate = 1 - GetBeamRate();
-				SetBeamStep(rate);
-
-				_beamTime += Time.deltaTime;
-			}
-			else if (CheckBlockTime())
-			{
-				float rate = 1 - GetBlockRate();
-				SetBlockClip(GetBlockClip(rate));
-				SetBlockColor(rate);
-
-				_blockTime += Time.deltaTime;
+				Renderer renderer = meshFilter.GetComponent<Renderer>();
+				renderer.enabled = isEnable;
 			}
 		}
 		#endregion

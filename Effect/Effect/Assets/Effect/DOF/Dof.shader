@@ -6,7 +6,9 @@ Shader "Custom/Dof"
 
 		_BlurPower("BlurPower",Float) = 1
 		_BlurCenterPower("BlurCenterPower",Range(0,1)) = 0.5
+		_MaxBlurDistance("MaxBlurDistance",Float) = 0
 		_FocalDistance("FocalDistance",Float) = 1
+		_FocalRange("FocalRange",Range(0,1)) = 1
 	}
 	SubShader 
 	{
@@ -25,7 +27,9 @@ Shader "Custom/Dof"
 
 			float _BlurPower;
 			float _BlurCenterPower;
+			float _MaxBlurDistance;
 			float _FocalDistance;
+			float _FocalRange;
 
 			struct a2v
 			{
@@ -64,7 +68,9 @@ Shader "Custom/Dof"
 
 				float depth  = UNITY_SAMPLE_DEPTH (tex2D (_CameraDepthTexture, i.uv[0]));
 				depth  = LinearEyeDepth(depth);
-				half blurFactor = saturate(abs(depth - _FocalDistance));
+				depth = abs(depth - _FocalDistance);
+				float blurFactor = saturate(saturate(depth / _MaxBlurDistance) - _FocalRange);
+				//clip(blurFactor - _FocalRange);
 				return lerp(source, blur,blurFactor);
 			}
 			ENDCG
