@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 
-namespace RPG2.Effect
+namespace Effect.Block
 {
 	public class BlockEffect : MonoBehaviour
 	{
