@@ -52,6 +52,7 @@ Shader "Custom/Blocking"
 
 			float _BeamStep;
 			float _EffectRadius;
+			float _EffectRadiusCache;
 			float _EffectHideRate;
 			float _EffectShowRate;
 			float3 _EffectPosition;
@@ -94,7 +95,7 @@ Shader "Custom/Blocking"
 			v2f Create(float4 originalPos,float4 offset, float2 uv)
 			{
 				float dist = length(_EffectPosition - originalPos.xyz);
-				float rate = (_EffectRadius - dist) / _EffectRadius;
+				float rate = 1 - (dist / _EffectRadiusCache);
 				rate = saturate((rate - _EffectHideRate) / (_EffectShowRate - _EffectHideRate));
 			
 				float4 p = originalPos + offset;
@@ -127,7 +128,7 @@ Shader "Custom/Blocking"
 				float2 centerUV = (input[0].uv + input[1].uv + input[2].uv) / 3;
 				float unit = _BlockUnit - 2 * _Offset;
 
-				_EffectRadius = _EffectRadius * (_BeamStep + 0.000000000001);
+				_EffectRadiusCache = _EffectRadius * (_BeamStep + 0.000000000001);
 
 				v2f o[8];
 				o[0] = Create(original, float4(0, 0, 0, 0), centerUV);

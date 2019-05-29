@@ -283,12 +283,12 @@ PrefabInstance:
     - target: {fileID: 114649126418973382, guid: db4a573cb1f17ee4c9c8de21283c9665,
         type: 3}
       propertyPath: _blockDuringTime
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114649126418973382, guid: db4a573cb1f17ee4c9c8de21283c9665,
         type: 3}
       propertyPath: _beamDuringTime
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114649126418973382, guid: db4a573cb1f17ee4c9c8de21283c9665,
         type: 3}
@@ -303,12 +303,17 @@ PrefabInstance:
     - target: {fileID: 114649126418973382, guid: db4a573cb1f17ee4c9c8de21283c9665,
         type: 3}
       propertyPath: _blockClipMaxLength
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114649126418973382, guid: db4a573cb1f17ee4c9c8de21283c9665,
         type: 3}
       propertyPath: _effectRadius
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114649126418973382, guid: db4a573cb1f17ee4c9c8de21283c9665,
+        type: 3}
+      propertyPath: IsAppear
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 95716809962526048, guid: db4a573cb1f17ee4c9c8de21283c9665,
         type: 3}

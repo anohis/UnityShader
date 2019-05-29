@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using ToolKit.Math;
+using System;
 
 namespace Effect.Blur
 {
@@ -11,7 +12,7 @@ namespace Effect.Blur
 		public bool IsAppear = true;
 
 		[SerializeField] private Shader _shader;
-	
+
 		[SerializeField] private float _blockDuringTime = 1;
 		[SerializeField] private float _beamDuringTime = 1;
 		[SerializeField] private Color _color;
@@ -75,10 +76,6 @@ namespace Effect.Blur
 		{
 			IsAppear = !IsAppear;
 		}
-		public void DestroyObject()
-		{
-			Destroy(gameObject);
-		}
 		public void Restart()
 		{
 			_isComplete = false;
@@ -93,13 +90,13 @@ namespace Effect.Blur
 
 				if (IsAppear)
 				{
-					material.SetFloat("_BeamStep", 1);
+					material.SetFloat("_BeamStep", 0);
 					material.SetFloat("_BlockClip", GetBlockClip(1));
 					material.SetColor("_BlockColor", _color);
 				}
 				else
 				{
-					material.SetFloat("_BeamStep", 0);
+					material.SetFloat("_BeamStep", 1);
 					material.SetFloat("_BlockClip", GetBlockClip(0));
 					material.SetColor("_BlockColor", new Color(0, 0, 0, 0));
 				}
@@ -143,7 +140,8 @@ namespace Effect.Blur
 
 		private float GetBlockClip(float rate)
 		{
-			return _maxBlockClip * (2 * rate - 1);
+			//return _maxBlockClip * (2 * rate - 1);
+			return rate;
 		}
 
 		private void Disappear()
@@ -151,22 +149,13 @@ namespace Effect.Blur
 			if (CheckBlockTime())
 			{
 				float rate = GetBlockRate();
-				foreach (var material in _materials)
-				{
-					material.SetFloat("_BlockClip", GetBlockClip(rate));
-					material.SetColor("_BlockColor", _color * rate);
-				}
-
+				Blocking(rate);
 				_blockTime += Time.deltaTime;
 			}
 			else if (CheckBeamTime())
 			{
-				float rate = 1-GetBeamRate();
-				foreach (var material in _materials)
-				{
-					material.SetFloat("_BeamStep", rate);
-				}
-
+				float rate = 1 - GetBeamRate();
+				Beaming(rate);
 				_beamTime += Time.deltaTime;
 			}
 		}
@@ -175,29 +164,40 @@ namespace Effect.Blur
 			if (CheckBeamTime())
 			{
 				float rate = GetBeamRate();
-				foreach (var material in _materials)
-				{
-					material.SetFloat("_BeamStep", rate);
-				}
-
+				Beaming(rate);
 				_beamTime += Time.deltaTime;
 			}
 			else if (CheckBlockTime())
 			{
 				float rate = 1 - GetBlockRate();
-				foreach (var material in _materials)
-				{
-					material.SetFloat("_BlockClip", GetBlockClip(rate));
-					material.SetColor("_BlockColor", _color * rate);
-				}
-
+				Blocking(rate);
 				_blockTime += Time.deltaTime;
 			}
 		}
 
-		private void Blocking()
+		private void Blocking(float rate)
 		{
+			var r = GetBlockClip(rate);
+			ForeachMaterials((m) =>
+			{
+				m.SetFloat("_BlockClip", r);
+				m.SetColor("_BlockColor", _color * rate);
+			});
+		}
+		private void Beaming(float rate)
+		{
+			ForeachMaterials((m) =>
+			{
+				m.SetFloat("_BeamStep", rate);
+			});
+		}
 
+		private void ForeachMaterials(Action<Material> action)
+		{
+			foreach (var material in _materials)
+			{
+				action?.Invoke(material);
+			}
 		}
 		#endregion
 	}
