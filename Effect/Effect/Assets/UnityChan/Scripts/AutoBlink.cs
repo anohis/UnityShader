@@ -1,11 +1,10 @@
-﻿//
+//
 //AutoBlink.cs
 //オート目パチスクリプト
 //2014/06/23 N.Kobayashi
 //
 using UnityEngine;
 using System.Collections;
-using System.Security.Policy;
 
 namespace UnityChan
 {
