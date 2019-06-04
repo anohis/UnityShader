@@ -86,6 +86,7 @@
     <None Include="Assets\Effect\RimLight\RimLight.shader" />
     <None Include="Assets\Wybren\Shaders\WorldSpaceFadeout.shader" />
     <None Include="Assets\UnityChan\Voice\unity-chan_voice_list.txt" />
+    <None Include="Assets\Effect\CircleRange\Range.shader" />
     <None Include="Assets\Noise.cginc" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_fuku_ds.shader" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_eye_blend.shader" />
