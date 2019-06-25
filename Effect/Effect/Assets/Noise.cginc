@@ -61,7 +61,7 @@ float Perlin3D(float3 P)
 	float2 res1 = lerp(res0.xy, res0.zw, blend.y);
 	float final = lerp(res1.x, res1.y, blend.x);
 	final = final / 2;
-	//final½d³ò¦b-1~1
+	//finalç¯„åœåœ¨-1~1
 	return final;
 }
 
