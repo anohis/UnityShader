@@ -64,12 +64,13 @@
     <Compile Include="Assets\Effect\Block\BlockEffect.cs" />
     <Compile Include="Assets\Effect\Blur\BlurEffect.cs" />
     <Compile Include="Assets\Effect\DOF\DofEffect.cs" />
+    <Compile Include="Assets\Effect\GW2GS\Showcase.cs" />
     <Compile Include="Assets\Effect\GW2GS\Tail.cs" />
+    <Compile Include="Assets\Effect\GW2GS\TailSection.cs" />
     <Compile Include="Assets\Effect\GW2GS\WeaponTail.cs" />
     <Compile Include="Assets\Effect\Ghost\GhostEffect.cs" />
     <Compile Include="Assets\Input\InputHandler.cs" />
     <Compile Include="Assets\Input\InputReceiver.cs" />
-    <Compile Include="Assets\Starfield Skybox\Demo\Script\LookCamera.cs" />
     <Compile Include="Assets\Tool\Math\Math.cs" />
     <Compile Include="Assets\Tool\Timer\Timer.cs" />
     <Compile Include="Assets\UnityChan\Scripts\AutoBlink.cs" />
@@ -96,7 +97,7 @@
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_fuku_ds.shader" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_eyelash_blend.shader" />
     <None Include="Assets\Noise.cginc" />
-    <None Include="Assets\Effect\GW2GS\NewImageEffectShader.shader" />
+    <None Include="Assets\Effect\GW2GS\GS-Tail.shader" />
     <None Include="Assets\Effect\RimLight\RimLight.shader" />
     <None Include="Assets\Blur.cginc" />
     <None Include="Assets\UnityChan\Voice\unity-chan_voice_list.txt" />

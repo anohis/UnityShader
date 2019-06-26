@@ -1,0 +1,299 @@
+fileFormatVersion: 2
+guid: 4bc1de7703623334fb4a75e7c049399e
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: B_Calf_L
+    100002: B_Calf_R
+    100004: B_Chest
+    100006: B_Chest2
+    100008: B_Eye_L
+    100010: B_Eye_R
+    100012: B_EyeUp_L
+    100014: B_EyeUp_R
+    100016: B_Finger11_L
+    100018: B_Finger11_R
+    100020: B_Finger12_L
+    100022: B_Finger12_R
+    100024: B_Finger13_L
+    100026: B_Finger13_R
+    100028: B_Finger21_L
+    100030: B_Finger21_R
+    100032: B_Finger22_L
+    100034: B_Finger22_R
+    100036: B_Finger23_L
+    100038: B_Finger23_R
+    100040: B_Finger31_L
+    100042: B_Finger31_R
+    100044: B_Finger32_L
+    100046: B_Finger32_R
+    100048: B_Finger33_L
+    100050: B_Finger33_R
+    100052: B_Finger41_L
+    100054: B_Finger41_R
+    100056: B_Finger42_L
+    100058: B_Finger42_R
+    100060: B_Finger43_L
+    100062: B_Finger43_R
+    100064: B_Finger51_L
+    100066: B_Finger51_R
+    100068: B_Finger52_L
+    100070: B_Finger52_R
+    100072: B_Finger53_L
+    100074: B_Finger53_R
+    100076: B_Foot_L
+    100078: B_Foot_R
+    100080: B_Forearm_L
+    100082: B_Forearm_R
+    100084: B_Hair11
+    100086: B_Hair12
+    100088: B_Hair13
+    100090: B_Hair14
+    100092: B_Hair15
+    100094: B_Hair16
+    100096: B_Hair21
+    100098: B_Hair22
+    100100: B_Hair23
+    100102: B_Hair31
+    100104: B_Hair32
+    100106: B_Hair33
+    100108: B_Hair34
+    100110: B_Hair41
+    100112: B_Hair42
+    100114: B_Hair43
+    100116: B_Hand_L
+    100118: B_Hand_R
+    100120: B_Head
+    100122: B_Hip
+    100124: B_Neck
+    100126: B_Shoulder_L
+    100128: B_Shoulder_R
+    100130: B_SwordCap
+    100132: B_Thigh_L
+    100134: B_Thigh_R
+    100136: B_Toe_L
+    100138: B_Toe_R
+    100140: B_UpperArm_L
+    100142: B_UpperArm_R
+    100144: B_Waist
+    100146: B_Weapon2
+    100148: //RootNode
+    100150: Root
+    400000: B_Calf_L
+    400002: B_Calf_R
+    400004: B_Chest
+    400006: B_Chest2
+    400008: B_Eye_L
+    400010: B_Eye_R
+    400012: B_EyeUp_L
+    400014: B_EyeUp_R
+    400016: B_Finger11_L
+    400018: B_Finger11_R
+    400020: B_Finger12_L
+    400022: B_Finger12_R
+    400024: B_Finger13_L
+    400026: B_Finger13_R
+    400028: B_Finger21_L
+    400030: B_Finger21_R
+    400032: B_Finger22_L
+    400034: B_Finger22_R
+    400036: B_Finger23_L
+    400038: B_Finger23_R
+    400040: B_Finger31_L
+    400042: B_Finger31_R
+    400044: B_Finger32_L
+    400046: B_Finger32_R
+    400048: B_Finger33_L
+    400050: B_Finger33_R
+    400052: B_Finger41_L
+    400054: B_Finger41_R
+    400056: B_Finger42_L
+    400058: B_Finger42_R
+    400060: B_Finger43_L
+    400062: B_Finger43_R
+    400064: B_Finger51_L
+    400066: B_Finger51_R
+    400068: B_Finger52_L
+    400070: B_Finger52_R
+    400072: B_Finger53_L
+    400074: B_Finger53_R
+    400076: B_Foot_L
+    400078: B_Foot_R
+    400080: B_Forearm_L
+    400082: B_Forearm_R
+    400084: B_Hair11
+    400086: B_Hair12
+    400088: B_Hair13
+    400090: B_Hair14
+    400092: B_Hair15
+    400094: B_Hair16
+    400096: B_Hair21
+    400098: B_Hair22
+    400100: B_Hair23
+    400102: B_Hair31
+    400104: B_Hair32
+    400106: B_Hair33
+    400108: B_Hair34
+    400110: B_Hair41
+    400112: B_Hair42
+    400114: B_Hair43
+    400116: B_Hand_L
+    400118: B_Hand_R
+    400120: B_Head
+    400122: B_Hip
+    400124: B_Neck
+    400126: B_Shoulder_L
+    400128: B_Shoulder_R
+    400130: B_SwordCap
+    400132: B_Thigh_L
+    400134: B_Thigh_R
+    400136: B_Toe_L
+    400138: B_Toe_R
+    400140: B_UpperArm_L
+    400142: B_UpperArm_R
+    400144: B_Waist
+    400146: B_Weapon2
+    400148: //RootNode
+    400150: Root
+    7400000: MAN0001_Light_Atk04_00
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 1
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: MAN0001_Light_Atk04_00
+      takeName: MAN0001_Light_Atk04_00
+      firstFrame: 0
+      lastFrame: 50
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0
+        functionName: OpenSwordEffect
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.31529093
+        functionName: UseSkill
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.53136986
+        functionName: StopSkill
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.66949725
+        functionName: CloseSwordEffect
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 1
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: B_Hip
+    rootMotionBoneRotation: {x: -0.5000003, y: 0.50000113, z: 0.49999967, w: -0.49999896}
+    hasTranslationDoF: 1
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 58a6d03d117ff274f9fdd8bdcb78006e,
+    type: 3}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

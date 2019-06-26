@@ -1,0 +1,287 @@
+fileFormatVersion: 2
+guid: 8b98714434515b54da353a4d5abb6e44
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: _XXdebug
+    100002: B_Calf_L
+    100004: B_Calf_R
+    100006: B_Chest
+    100008: B_Chest2
+    100010: B_Eye_L
+    100012: B_Eye_R
+    100014: B_EyeUp_L
+    100016: B_EyeUp_R
+    100018: B_Finger11_L
+    100020: B_Finger11_R
+    100022: B_Finger12_L
+    100024: B_Finger12_R
+    100026: B_Finger13_L
+    100028: B_Finger13_R
+    100030: B_Finger21_L
+    100032: B_Finger21_R
+    100034: B_Finger22_L
+    100036: B_Finger22_R
+    100038: B_Finger23_L
+    100040: B_Finger23_R
+    100042: B_Finger31_L
+    100044: B_Finger31_R
+    100046: B_Finger32_L
+    100048: B_Finger32_R
+    100050: B_Finger33_L
+    100052: B_Finger33_R
+    100054: B_Finger41_L
+    100056: B_Finger41_R
+    100058: B_Finger42_L
+    100060: B_Finger42_R
+    100062: B_Finger43_L
+    100064: B_Finger43_R
+    100066: B_Finger51_L
+    100068: B_Finger51_R
+    100070: B_Finger52_L
+    100072: B_Finger52_R
+    100074: B_Finger53_L
+    100076: B_Finger53_R
+    100078: B_Foot_L
+    100080: B_Foot_R
+    100082: B_Forearm_L
+    100084: B_Forearm_R
+    100086: B_Hair11
+    100088: B_Hair12
+    100090: B_Hair13
+    100092: B_Hair14
+    100094: B_Hair15
+    100096: B_Hair16
+    100098: B_Hair21
+    100100: B_Hair22
+    100102: B_Hair23
+    100104: B_Hair31
+    100106: B_Hair32
+    100108: B_Hair33
+    100110: B_Hair34
+    100112: B_Hair41
+    100114: B_Hair42
+    100116: B_Hair43
+    100118: B_Hand_L
+    100120: B_Hand_R
+    100122: B_Head
+    100124: B_Hip
+    100126: B_Neck
+    100128: B_Shoulder_L
+    100130: B_Shoulder_R
+    100132: B_SwordCap
+    100134: B_Thigh_L
+    100136: B_Thigh_R
+    100138: B_Toe_L
+    100140: B_Toe_R
+    100142: B_UpperArm_L
+    100144: B_UpperArm_R
+    100146: B_Waist
+    100148: B_Weapon2
+    100150: //RootNode
+    100152: Root
+    400000: _XXdebug
+    400002: B_Calf_L
+    400004: B_Calf_R
+    400006: B_Chest
+    400008: B_Chest2
+    400010: B_Eye_L
+    400012: B_Eye_R
+    400014: B_EyeUp_L
+    400016: B_EyeUp_R
+    400018: B_Finger11_L
+    400020: B_Finger11_R
+    400022: B_Finger12_L
+    400024: B_Finger12_R
+    400026: B_Finger13_L
+    400028: B_Finger13_R
+    400030: B_Finger21_L
+    400032: B_Finger21_R
+    400034: B_Finger22_L
+    400036: B_Finger22_R
+    400038: B_Finger23_L
+    400040: B_Finger23_R
+    400042: B_Finger31_L
+    400044: B_Finger31_R
+    400046: B_Finger32_L
+    400048: B_Finger32_R
+    400050: B_Finger33_L
+    400052: B_Finger33_R
+    400054: B_Finger41_L
+    400056: B_Finger41_R
+    400058: B_Finger42_L
+    400060: B_Finger42_R
+    400062: B_Finger43_L
+    400064: B_Finger43_R
+    400066: B_Finger51_L
+    400068: B_Finger51_R
+    400070: B_Finger52_L
+    400072: B_Finger52_R
+    400074: B_Finger53_L
+    400076: B_Finger53_R
+    400078: B_Foot_L
+    400080: B_Foot_R
+    400082: B_Forearm_L
+    400084: B_Forearm_R
+    400086: B_Hair11
+    400088: B_Hair12
+    400090: B_Hair13
+    400092: B_Hair14
+    400094: B_Hair15
+    400096: B_Hair16
+    400098: B_Hair21
+    400100: B_Hair22
+    400102: B_Hair23
+    400104: B_Hair31
+    400106: B_Hair32
+    400108: B_Hair33
+    400110: B_Hair34
+    400112: B_Hair41
+    400114: B_Hair42
+    400116: B_Hair43
+    400118: B_Hand_L
+    400120: B_Hand_R
+    400122: B_Head
+    400124: B_Hip
+    400126: B_Neck
+    400128: B_Shoulder_L
+    400130: B_Shoulder_R
+    400132: B_SwordCap
+    400134: B_Thigh_L
+    400136: B_Thigh_R
+    400138: B_Toe_L
+    400140: B_Toe_R
+    400142: B_UpperArm_L
+    400144: B_UpperArm_R
+    400146: B_Waist
+    400148: B_Weapon2
+    400150: //RootNode
+    400152: Root
+    7400000: MAN0001_Dodge
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 1
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: MAN0001_Dodge
+      takeName: MAN0001_Dodge
+      firstFrame: 0
+      lastFrame: 15
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0
+        functionName: StartDodge
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9891107
+        functionName: StopDodge
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 1
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: B_Hip
+    rootMotionBoneRotation: {x: -0.5000003, y: 0.50000113, z: 0.49999967, w: -0.49999896}
+    hasTranslationDoF: 1
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 58a6d03d117ff274f9fdd8bdcb78006e,
+    type: 3}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
