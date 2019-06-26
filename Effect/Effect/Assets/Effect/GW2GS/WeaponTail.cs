@@ -13,6 +13,7 @@ namespace Effect.GS
         [SerializeField] private Material _material;
         [SerializeField] private int _amountOfPoints = 10;
         [SerializeField] private float _alpha = 0.5f;
+        [SerializeField] private AnimationCurve _alphaCurve;
 
         private const int _interpolationCount = 4;
 
@@ -21,10 +22,14 @@ namespace Effect.GS
         private Mesh _mesh;
 
         private List<TailSection> _tailSections = new List<TailSection>();
+        private List<TailSection> _renderSections = new List<TailSection>();
+
+        private List<Vector3> _positionCache = new List<Vector3>();
 
         private Vector3[] _vertices;
         private Color[] _colors;
         private Vector2[] _uvs;
+        private Vector2[] _uvs2;
         private int[] _triangles;
 
         private Vector3 PointA
@@ -43,11 +48,11 @@ namespace Effect.GS
         }
         private int VerticeCount
         {
-            get { return _tailSections.Count * 2; }
+            get { return _renderSections.Count * 2; }
         }
         private int TriangleCount
         {
-            get { return (_tailSections.Count - 1) * 2; }
+            get { return (_renderSections.Count - 1) * 2; }
         }
 
         private void Start()
@@ -62,9 +67,24 @@ namespace Effect.GS
         }
         private void Update()
         {
-            UpdateTailTime();
+            UpdateTailTime(_tailSections);
+            UpdateTailTime(_renderSections);
             CaptureTail();
+            Interpolate();
             DrawTail();
+        }
+        private void Interpolate()
+        {
+            var baseIdx = _tailSections.Count - _interpolationCount;
+            if (baseIdx < 0)
+            {
+                return;
+            }
+
+            CatmulRom(_tailSections[baseIdx + 0],
+                        _tailSections[baseIdx + 1],
+                        _tailSections[baseIdx + 2],
+                        _tailSections[baseIdx + 3]);
         }
         private void CaptureTail()
         {
@@ -75,72 +95,18 @@ namespace Effect.GS
                 Time = Time.time
             };
 
-            var listA = new List<Vector3>();
-            var listB = new List<Vector3>();
-
-            if (_tailSections.Count == 1)
-            {
-                listA.Add(_tailSections[0].PointA);
-                listA.Add(_tailSections[0].PointA);
-                listA.Add(newTailSection.PointA);
-                listA.Add(newTailSection.PointA);
-
-                listB.Add(_tailSections[0].PointB);
-                listB.Add(_tailSections[0].PointB);
-                listB.Add(newTailSection.PointB);
-                listB.Add(newTailSection.PointB);
-            }
-            else if (_tailSections.Count == 2)
-            {
-                listA.Add(_tailSections[0].PointA);
-                listA.Add(_tailSections[1].PointA);
-                listA.Add(newTailSection.PointA);
-                listA.Add(newTailSection.PointA);
-
-                listB.Add(_tailSections[0].PointB);
-                listB.Add(_tailSections[1].PointB);
-                listB.Add(newTailSection.PointB);
-                listB.Add(newTailSection.PointB);
-            }
-            else if (_tailSections.Count >= 3)
-            {
-                int baseIdx = _tailSections.Count - _interpolationCount + 1;
-
-                listA.Add(_tailSections[baseIdx + 0].PointA);
-                listA.Add(_tailSections[baseIdx + 1].PointA);
-                listA.Add(_tailSections[baseIdx + 2].PointA);
-                listA.Add(newTailSection.PointA);
-
-                listB.Add(_tailSections[baseIdx + 0].PointB);
-                listB.Add(_tailSections[baseIdx + 1].PointB);
-                listB.Add(_tailSections[baseIdx + 2].PointB);
-                listB.Add(newTailSection.PointB);
-            }
-
-            CatmulRom(listA);
-            CatmulRom(listB);
-            for (int i = 1; i < listA.Count - 1; i++)
-            {
-                _tailSections.Add(new TailSection()
-                {
-                    PointA = listA[i],
-                    PointB = listB[i],
-                    Time = Time.time
-                });
-            }
-
             _tailSections.Add(newTailSection);
         }
-        private void UpdateTailTime()
+        private void UpdateTailTime(List<TailSection> tails)
         {
-            while (_tailSections.Count > 0 && Time.time > _tailSections[0].Time + _during)
+            while (tails.Count > 0 && Time.time > tails[0].Time + _during)
             {
-                _tailSections.RemoveAt(0);
+                tails.RemoveAt(0);
             }
         }
         private void DrawTail()
         {
-            if (_tailSections.Count < 2)
+            if (_renderSections.Count < 2)
             {
                 return;
             }
@@ -150,22 +116,29 @@ namespace Effect.GS
             _vertices = new Vector3[VerticeCount];
             _colors = new Color[VerticeCount];
             _uvs = new Vector2[VerticeCount];
+            _uvs2 = new Vector2[VerticeCount];
 
-            for (var i = 0; i < _tailSections.Count; i++)
+            for (var i = 0; i < _renderSections.Count; i++)
             {
-                var currentSection = _tailSections[i];
+                var currentSection = _renderSections[i];
+
+                var indexA = i * 2 + 0;
+                var indexB = i * 2 + 1;
+
+                _vertices[indexA] = (currentSection.PointA);
+                _vertices[indexB] = (currentSection.PointB);
+
+                _uvs[indexA] = currentSection.UVA;
+                _uvs[indexB] = currentSection.UVB;
 
                 float u = Mathf.Clamp01((Time.time - currentSection.Time) / _during);
-
-                _vertices[i * 2 + 0] = (currentSection.PointA);
-                _vertices[i * 2 + 1] = (currentSection.PointB);
-
-                _uvs[i * 2 + 0] = new Vector2(u, 0);
-                _uvs[i * 2 + 1] = new Vector2(u, 1);
+                u = _alphaCurve.Evaluate(u);
+                _uvs2[indexA] = Vector2.one * u;
+                _uvs2[indexB] = Vector2.one * u;
 
                 Color interpolatedColor = Color.Lerp(Color.blue, Color.red, u);
-                _colors[i * 2 + 0] = interpolatedColor;
-                _colors[i * 2 + 1] = interpolatedColor;
+                _colors[indexA] = interpolatedColor;
+                _colors[indexB] = interpolatedColor;
             }
 
             int[] triangles = new int[TriangleCount * 3];
@@ -183,6 +156,7 @@ namespace Effect.GS
             _mesh.vertices = _vertices;
             _mesh.colors = _colors;
             _mesh.uv = _uvs;
+            _mesh.uv2 = _uvs2;
             _mesh.triangles = triangles;
 
             _meshFilter.mesh = _mesh;
@@ -194,25 +168,42 @@ namespace Effect.GS
             Gizmos.DrawSphere(PointB, 0.1f);
         }
         //https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline
-        private void CatmulRom(List<Vector3> newPoints)
+        private void CatmulRom(TailSection t0, TailSection t1, TailSection t2, TailSection t3)
         {
-            if (newPoints.Count < 4)
+            _positionCache.Clear();
+
+            var countA = CatmulRom(t0.PointA, t1.PointA, t2.PointA, t3.PointA, _positionCache);
+            var countB = CatmulRom(t0.PointB, t1.PointB, t2.PointB, t3.PointB, _positionCache);
+
+            if (countA != countB)
             {
-                newPoints.Clear();
-                return;
+                Debug.LogError("[WeaponTail.CatmulRom]countA != countB");
             }
 
-            var p0 = newPoints[0]; 
-            var p1 = newPoints[1];
-            var p2 = newPoints[2];
-            var p3 = newPoints[3];
+            var count = Mathf.Min(countA, countB);
+            for (int i = 0; i < count; i++)
+            {
+                var noise = Mathf.Clamp01(Mathf.PerlinNoise(_positionCache[i].x, _positionCache[i].y));
+                var tail = new TailSection()
+                {
+                    PointA = _positionCache[i],
+                    PointB = _positionCache[countA + i],
+                    Time = Mathf.Lerp(t1.Time, t2.Time, (float)i / count),
+                    UVA = new Vector2(noise, 0),
+                    UVB = new Vector2(noise, 1),
+                };
 
-            newPoints.Clear();
-
+                _renderSections.Add(tail);
+            }
+        }
+        private int CatmulRom(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, List<Vector3> newPoints)
+        {
             float t0 = 0.0f;
             float t1 = GetT(t0, p0, p1);
             float t2 = GetT(t1, p1, p2);
             float t3 = GetT(t2, p2, p3);
+
+            int count = 0;
 
             for (float t = t1; t < t2; t += ((t2 - t1) / _amountOfPoints))
             {
@@ -226,7 +217,10 @@ namespace Effect.GS
                 var C = (t2 - t) / (t2 - t1) * B1 + (t - t1) / (t2 - t1) * B2;
 
                 newPoints.Add(C);
+                count++;
             }
+
+            return count;
         }
         private float GetT(float t, Vector3 p0, Vector3 p1)
         {

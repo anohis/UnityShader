@@ -3,9 +3,13 @@ Shader "Custom/GS"
 	Properties
 	{
 		_Cubemap("Cubemap", Cube) = "" {}
+		_Brightness("Brightness", Float) = 1
+		_Saturation("Saturation", Float) = 1
+		_Contrast("Contrast", Float) = 1
 	}
-		SubShader
+	SubShader
 	{
+
 		Pass
 		{
 			CGPROGRAM
@@ -13,6 +17,7 @@ Shader "Custom/GS"
 			#pragma fragment frag
 
 			#include "UnityCG.cginc"
+			#include "Assets/Hsv.cginc"
 
 			samplerCUBE _Cubemap;
 
@@ -45,7 +50,8 @@ Shader "Custom/GS"
 
 			fixed4 frag(v2f i) : SV_Target
 			{
-				return texCUBE(_Cubemap, i.worldViewDir);
+				fixed4 color = texCUBE(_Cubemap, i.worldViewDir);
+				return fixed4(GetColor(color.rgb),color.a);
 			}
 			ENDCG
 		}
@@ -57,6 +63,7 @@ Shader "Custom/GS"
 
 			#include "UnityCG.cginc"
 			#include "Assets/Noise.cginc"
+			#include "Assets/Hsv.cginc"
 
 			samplerCUBE _Cubemap;
 
@@ -79,7 +86,7 @@ Shader "Custom/GS"
 			v2f vert(appdata v)
 			{
 				v2f o;
-				v.vertex.xyz += v.normal * 0.005;
+				v.vertex.xyz += v.normal * 0.0025;
 				o.pos = UnityObjectToClipPos(v.vertex);
 				o.worldNormal = UnityObjectToWorldNormal(v.normal);
 				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
@@ -92,7 +99,9 @@ Shader "Custom/GS"
 			{
 				float gradient = PerlinNormal(i.worldPos * sin(_Time.x), 10, 10, 100, 1, 1, 1);
 				clip(gradient);
-				return texCUBE(_Cubemap, i.worldViewDir);
+
+				fixed4 color = texCUBE(_Cubemap, i.worldViewDir);
+				return fixed4(GetColor(color.rgb), color.a);
 			}
 			ENDCG
 		}

@@ -10,5 +10,7 @@ namespace Effect.GS
         public Vector3 PointA;
         public Vector3 PointB;
         public float Time;
+        public Vector2 UVA;
+        public Vector2 UVB;
     }
 }
