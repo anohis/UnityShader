@@ -65,7 +65,6 @@
     <Compile Include="Assets\Effect\Blur\BlurEffect.cs" />
     <Compile Include="Assets\Effect\DOF\DofEffect.cs" />
     <Compile Include="Assets\Effect\GW2GS\Showcase.cs" />
-    <Compile Include="Assets\Effect\GW2GS\Tail.cs" />
     <Compile Include="Assets\Effect\GW2GS\TailSection.cs" />
     <Compile Include="Assets\Effect\GW2GS\WeaponTail.cs" />
     <Compile Include="Assets\Effect\Ghost\GhostEffect.cs" />
