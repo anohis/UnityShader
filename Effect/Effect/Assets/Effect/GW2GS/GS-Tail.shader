@@ -4,15 +4,20 @@ Shader "Custom/GS-Tail"
     {
 		_MainTex("Texture", 2D) = "white" {}
 		_Cubemap("Cubemap", Cube) = "" {}
+		_AlphaMin("AlphaMin", Range(0,1)) = 0
+		_AlphaMax("AlphaMax", Range(0,1)) = 1
 		_Brightness("Brightness", Float) = 1
 		_Saturation("Saturation", Float) = 1
 		_Contrast("Contrast", Float) = 1
     }
     SubShader
     {
-        Pass
+		Tags{ "Queue" = "Transparent"  "IgnoreProjector" = "True" "RenderType" = "Transparent" }
+		Pass
 		{
 			Cull off
+			Zwrite Off
+			Blend SrcAlpha OneMinusSrcAlpha
 
 			CGPROGRAM
 			#pragma vertex vert
@@ -24,6 +29,8 @@ Shader "Custom/GS-Tail"
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
 			samplerCUBE _Cubemap;
+			float _AlphaMin;
+			float _AlphaMax;
 
 			struct appdata
 			{
@@ -57,9 +64,13 @@ Shader "Custom/GS-Tail"
 
 			fixed4 frag(v2f i) : SV_Target
 			{
-				clip(tex2D(_MainTex, i.uv).a - i.uv2.x);
+				fixed alpha = tex2D(_MainTex, i.uv).a - i.uv2.x;
+				clip(alpha);
 				fixed4 color = texCUBE(_Cubemap, i.worldViewDir);
-				return fixed4(GetColor(color.rgb), color.a);
+
+				alpha = (alpha - _AlphaMin) / (_AlphaMax - _AlphaMin);
+				alpha = min(max(alpha,0),1);
+				return fixed4(GetColor(color.rgb), alpha);
 			}
 			ENDCG
 		}
