@@ -73,6 +73,8 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _RefractAmount: 1
+    - _RefractRatio: 1
     - _Saturation: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

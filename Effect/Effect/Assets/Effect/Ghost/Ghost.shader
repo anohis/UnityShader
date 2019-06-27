@@ -50,8 +50,6 @@ Shader "Custom/Ghost"
 			float _SandRangePower;
 			float _SandSize;
 
-			float _Amplitude;
-
 			struct a2v
 			{
 				float4 vertex : POSITION;
@@ -81,7 +79,7 @@ Shader "Custom/Ghost"
 
 			float GetDissolve(float3 pos)
 			{
-				float gradient = PerlinNormal(pos, 1, float3(0,0,0), 1, _Amplitude, 1, 1);
+				float gradient = PerlinNormal(pos);
 				float dissolve = (gradient /_Amplitude  + 1) * 0.5;
 				return dissolve;
 

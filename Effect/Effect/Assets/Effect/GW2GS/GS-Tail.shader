@@ -4,20 +4,27 @@ Shader "Custom/GS-Tail"
     {
 		_MainTex("Texture", 2D) = "white" {}
 		_Cubemap("Cubemap", Cube) = "" {}
-		_AlphaMin("AlphaMin", Range(0,1)) = 0
-		_AlphaMax("AlphaMax", Range(0,1)) = 1
+
 		_Brightness("Brightness", Float) = 1
 		_Saturation("Saturation", Float) = 1
 		_Contrast("Contrast", Float) = 1
+
+		_RefractRatio("Refraction Ratio", Range(-1, 1)) = 0.5
+
+		_Octaves("Octaves", Float) = 1
+		_Frequency("Frequency", Float) = 2.0
+		_Amplitude("Amplitude", Float) = 1.0
+		_Lacunarity("Lacunarity", Float) = 1
+		_Persistence("Persistence", Float) = 0.8
+		_Offset("Offset", Vector) = (0.0, 0.0, 0.0, 0.0)
     }
     SubShader
     {
-		Tags{ "Queue" = "Transparent"  "IgnoreProjector" = "True" "RenderType" = "Transparent" }
 		Pass
 		{
 			Cull off
-			Zwrite Off
-			Blend SrcAlpha OneMinusSrcAlpha
+			//Zwrite Off
+			//Blend SrcAlpha OneMinusSrcAlpha
 
 			CGPROGRAM
 			#pragma vertex vert
@@ -25,12 +32,13 @@ Shader "Custom/GS-Tail"
 
 			#include "UnityCG.cginc"
 			#include "Assets/Hsv.cginc"
+			#include "Assets/Noise.cginc"
+
 
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
 			samplerCUBE _Cubemap;
-			float _AlphaMin;
-			float _AlphaMax;
+			float _RefractRatio;
 
 			struct appdata
 			{
@@ -66,11 +74,21 @@ Shader "Custom/GS-Tail"
 			{
 				fixed alpha = tex2D(_MainTex, i.uv).a - i.uv2.x;
 				clip(alpha);
-				fixed4 color = texCUBE(_Cubemap, i.worldViewDir);
 
-				alpha = (alpha - _AlphaMin) / (_AlphaMax - _AlphaMin);
-				alpha = min(max(alpha,0),1);
-				return fixed4(GetColor(color.rgb), alpha);
+				float noise = PerlinNormal(i.worldPos);
+
+				float refractRatio = max(min(_RefractRatio, 1), -1);
+				refractRatio = _RefractRatio;
+
+				fixed3 worldRefr = refract(-normalize(i.worldViewDir), normalize(i.worldNormal), refractRatio);
+
+				fixed4 color = texCUBE(_Cubemap, worldRefr);
+
+				//return fixed4(GetColor(color.rgb), alpha);
+
+				float3 worldNormal = normalize(i.worldNormal);
+
+				return fixed4(worldNormal.x, worldNormal.y, worldNormal.z, 1);
 			}
 			ENDCG
 		}

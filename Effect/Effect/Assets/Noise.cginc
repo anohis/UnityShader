@@ -1,6 +1,13 @@
 #ifndef NOSIC
 #define NOSIC
 
+fixed _Octaves;
+float _Frequency;
+float _Amplitude;
+float3 _Offset;
+float _Lacunarity;
+float _Persistence;
+
 void PerlinHash3D(float3 gridcell,
 	out float4 lowz_hash_0,
 	out float4 lowz_hash_1,
@@ -65,18 +72,20 @@ float Perlin3D(float3 P)
 	return final;
 }
 
-float PerlinNormal(float3 p, int octaves, float3 offset, float frequency, float amplitude, float lacunarity, float persistence)
+float PerlinNormal(float3 p)
 {
 	float sum = 0;
-	for (int i = 0; i < octaves; i++)
+	float amplitude = _Amplitude;
+	float frequency = _Frequency;
+	for (int i = 0; i < _Octaves; i++)
 	{
 		float h = 0;
-		h = Perlin3D((p + offset) * frequency);
+		h = Perlin3D((p + _Offset) * frequency);
 		sum += h*amplitude;
-		frequency *= lacunarity;
-		amplitude *= persistence;
+		frequency *= _Lacunarity;
+		amplitude *= _Persistence;
 	}
-	return sum / octaves;
+	return sum / _Octaves;
 }
 
 #endif

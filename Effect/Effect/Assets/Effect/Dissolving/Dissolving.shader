@@ -53,13 +53,6 @@ Shader "Custom/Dissolving"
 
 			float _Cutoff;
 
-			fixed _Octaves;
-			float _Frequency;
-			float _Amplitude;
-			float3 _Offset;
-			float _Lacunarity;
-			float _Persistence;
-
 			float _Scale;
 			half _Glossiness;
 
@@ -142,7 +135,7 @@ Shader "Custom/Dissolving"
 				float cosY = clamp(0.0, 1.0, cos(clamp(0.0, pi, screenUV.y * pi - (0.5 * pi))));
 				float sceenValue = (cosX * _IntensityX + cosY * _IntensityY) - 1;
 
-				float gradient = PerlinNormal(i.worldPos, _Octaves, _Offset, _Frequency, _Amplitude, _Lacunarity, _Persistence);
+				float gradient = PerlinNormal(i.worldPos);
 			
 				clip(gradient + 2 * deepValue - sceenValue * pow((1 - deepValue), _DissolveDistancePower));
 
