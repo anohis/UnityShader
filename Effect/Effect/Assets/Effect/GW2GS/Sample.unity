@@ -331,7 +331,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pointA: {x: 0, y: 0, z: -0.2}
-  _pointB: {x: 0, y: 0, z: -1.2}
+  _pointB: {x: 0, y: 0, z: -1.18}
   _interval: 0.01
   _during: 1
   _material: {fileID: 2100000, guid: 5fc37e455f8611e46a19d86f76421248, type: 2}
