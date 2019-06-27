@@ -4,6 +4,7 @@ Shader "Custom/GS-Tail"
     {
 		_MainTex("Texture", 2D) = "white" {}
 		_Cubemap("Cubemap", Cube) = "" {}
+		_AlphaRange("AlphaRange", Range(0,1)) = 0.1
 
 		_Brightness("Brightness", Float) = 1
 		_Saturation("Saturation", Float) = 1
@@ -23,8 +24,8 @@ Shader "Custom/GS-Tail"
 		Pass
 		{
 			Cull off
-			//Zwrite Off
-			//Blend SrcAlpha OneMinusSrcAlpha
+			Zwrite Off
+			Blend SrcAlpha OneMinusSrcAlpha
 
 			CGPROGRAM
 			#pragma vertex vert
@@ -39,6 +40,7 @@ Shader "Custom/GS-Tail"
 			float4 _MainTex_ST;
 			samplerCUBE _Cubemap;
 			float _RefractRatio;
+			float _AlphaRange;
 
 			struct appdata
 			{
@@ -73,16 +75,14 @@ Shader "Custom/GS-Tail"
 			fixed4 frag(v2f i) : SV_Target
 			{
 				fixed alpha = tex2D(_MainTex, i.uv).a - i.uv2.x;
-				clip(alpha);
+				alpha = max(alpha, 0);
+				alpha = min(alpha / _AlphaRange, 1);
 
 				float noise = PerlinNormal(i.worldPos);
-
 				float refractRatio = max(min(_RefractRatio + noise, 1), -1);
-
 				float dir = sign(dot(i.worldNormal, i.worldViewDir));
 
 				fixed3 worldRefr = refract(-normalize(i.worldViewDir), normalize(i.worldNormal) * dir, refractRatio);
-
 				fixed4 color = texCUBE(_Cubemap, worldRefr);
 
 				return fixed4(GetColor(color.rgb), alpha);
