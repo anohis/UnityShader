@@ -18,6 +18,7 @@ namespace Effect.GS
         [SerializeField] private float _b;
         [SerializeField] private float _c;
         [SerializeField] private float _d;
+        [SerializeField] private float _normalLerp;
 
         private const int _interpolationCount = 4;
 
@@ -161,14 +162,8 @@ namespace Effect.GS
                     if (dir1 != Vector3.zero && dir2 != Vector3.zero)
                     {
                         var normal = Vector3.Cross(dir1, dir2).normalized;
-
-                        if (normal.y <= 0)
-                        {
-                            Debug.LogError(string.Format("{0}, {1}", dir1, dir2));
-                        }
-
-                        normals[indexA] = normal;
-                        normals[indexB] = normal;
+                        normals[indexA] = normal + _normalLerp * (dir2 - normal);
+                        normals[indexB] = normal + _normalLerp * (-dir2 - normal);
                     }
                 }
             }
@@ -269,7 +264,13 @@ namespace Effect.GS
 
                 newPoints.Add(C);
                 count++;
+
+                if (C.x == float.NaN)
+                {
+                    Debug.LogError("");
+                }
             }
+
 
             return count;
         }

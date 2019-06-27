@@ -1,162 +1,470 @@
 fileFormatVersion: 2
 guid: 7a79183ff11f53745822231f46602bcf
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: B_Calf_L
-    100002: B_Calf_R
-    100004: B_Chest
-    100006: B_Chest2
-    100008: B_Eye_L
-    100010: B_Eye_R
-    100012: B_EyeUp_L
-    100014: B_EyeUp_R
-    100016: B_Finger11_L
-    100018: B_Finger11_R
-    100020: B_Finger12_L
-    100022: B_Finger12_R
-    100024: B_Finger13_L
-    100026: B_Finger13_R
-    100028: B_Finger21_L
-    100030: B_Finger21_R
-    100032: B_Finger22_L
-    100034: B_Finger22_R
-    100036: B_Finger23_L
-    100038: B_Finger23_R
-    100040: B_Finger31_L
-    100042: B_Finger31_R
-    100044: B_Finger32_L
-    100046: B_Finger32_R
-    100048: B_Finger33_L
-    100050: B_Finger33_R
-    100052: B_Finger41_L
-    100054: B_Finger41_R
-    100056: B_Finger42_L
-    100058: B_Finger42_R
-    100060: B_Finger43_L
-    100062: B_Finger43_R
-    100064: B_Finger51_L
-    100066: B_Finger51_R
-    100068: B_Finger52_L
-    100070: B_Finger52_R
-    100072: B_Finger53_L
-    100074: B_Finger53_R
-    100076: B_Foot_L
-    100078: B_Foot_R
-    100080: B_Forearm_L
-    100082: B_Forearm_R
-    100084: B_Hair11
-    100086: B_Hair12
-    100088: B_Hair13
-    100090: B_Hair14
-    100092: B_Hair15
-    100094: B_Hair16
-    100096: B_Hair21
-    100098: B_Hair22
-    100100: B_Hair23
-    100102: B_Hair31
-    100104: B_Hair32
-    100106: B_Hair33
-    100108: B_Hair34
-    100110: B_Hair41
-    100112: B_Hair42
-    100114: B_Hair43
-    100116: B_Hand_L
-    100118: B_Hand_R
-    100120: B_Head
-    100122: B_Hip
-    100124: B_Neck
-    100126: B_Shoulder_L
-    100128: B_Shoulder_R
-    100130: B_SwordCap
-    100132: B_Thigh_L
-    100134: B_Thigh_R
-    100136: B_Toe_L
-    100138: B_Toe_R
-    100140: B_UpperArm_L
-    100142: B_UpperArm_R
-    100144: B_Waist
-    100146: B_Weapon2
-    100148: //RootNode
-    100150: Root
-    400000: B_Calf_L
-    400002: B_Calf_R
-    400004: B_Chest
-    400006: B_Chest2
-    400008: B_Eye_L
-    400010: B_Eye_R
-    400012: B_EyeUp_L
-    400014: B_EyeUp_R
-    400016: B_Finger11_L
-    400018: B_Finger11_R
-    400020: B_Finger12_L
-    400022: B_Finger12_R
-    400024: B_Finger13_L
-    400026: B_Finger13_R
-    400028: B_Finger21_L
-    400030: B_Finger21_R
-    400032: B_Finger22_L
-    400034: B_Finger22_R
-    400036: B_Finger23_L
-    400038: B_Finger23_R
-    400040: B_Finger31_L
-    400042: B_Finger31_R
-    400044: B_Finger32_L
-    400046: B_Finger32_R
-    400048: B_Finger33_L
-    400050: B_Finger33_R
-    400052: B_Finger41_L
-    400054: B_Finger41_R
-    400056: B_Finger42_L
-    400058: B_Finger42_R
-    400060: B_Finger43_L
-    400062: B_Finger43_R
-    400064: B_Finger51_L
-    400066: B_Finger51_R
-    400068: B_Finger52_L
-    400070: B_Finger52_R
-    400072: B_Finger53_L
-    400074: B_Finger53_R
-    400076: B_Foot_L
-    400078: B_Foot_R
-    400080: B_Forearm_L
-    400082: B_Forearm_R
-    400084: B_Hair11
-    400086: B_Hair12
-    400088: B_Hair13
-    400090: B_Hair14
-    400092: B_Hair15
-    400094: B_Hair16
-    400096: B_Hair21
-    400098: B_Hair22
-    400100: B_Hair23
-    400102: B_Hair31
-    400104: B_Hair32
-    400106: B_Hair33
-    400108: B_Hair34
-    400110: B_Hair41
-    400112: B_Hair42
-    400114: B_Hair43
-    400116: B_Hand_L
-    400118: B_Hand_R
-    400120: B_Head
-    400122: B_Hip
-    400124: B_Neck
-    400126: B_Shoulder_L
-    400128: B_Shoulder_R
-    400130: B_SwordCap
-    400132: B_Thigh_L
-    400134: B_Thigh_R
-    400136: B_Toe_L
-    400138: B_Toe_R
-    400140: B_UpperArm_L
-    400142: B_UpperArm_R
-    400144: B_Waist
-    400146: B_Weapon2
-    400148: //RootNode
-    400150: Root
-    7400000: MAN0001_Light_Atk03_00
-    9500000: //RootNode
+  serializedVersion: 27
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: B_Calf_L
+  - first:
+      1: 100002
+    second: B_Calf_R
+  - first:
+      1: 100004
+    second: B_Chest
+  - first:
+      1: 100006
+    second: B_Chest2
+  - first:
+      1: 100008
+    second: B_Eye_L
+  - first:
+      1: 100010
+    second: B_Eye_R
+  - first:
+      1: 100012
+    second: B_EyeUp_L
+  - first:
+      1: 100014
+    second: B_EyeUp_R
+  - first:
+      1: 100016
+    second: B_Finger11_L
+  - first:
+      1: 100018
+    second: B_Finger11_R
+  - first:
+      1: 100020
+    second: B_Finger12_L
+  - first:
+      1: 100022
+    second: B_Finger12_R
+  - first:
+      1: 100024
+    second: B_Finger13_L
+  - first:
+      1: 100026
+    second: B_Finger13_R
+  - first:
+      1: 100028
+    second: B_Finger21_L
+  - first:
+      1: 100030
+    second: B_Finger21_R
+  - first:
+      1: 100032
+    second: B_Finger22_L
+  - first:
+      1: 100034
+    second: B_Finger22_R
+  - first:
+      1: 100036
+    second: B_Finger23_L
+  - first:
+      1: 100038
+    second: B_Finger23_R
+  - first:
+      1: 100040
+    second: B_Finger31_L
+  - first:
+      1: 100042
+    second: B_Finger31_R
+  - first:
+      1: 100044
+    second: B_Finger32_L
+  - first:
+      1: 100046
+    second: B_Finger32_R
+  - first:
+      1: 100048
+    second: B_Finger33_L
+  - first:
+      1: 100050
+    second: B_Finger33_R
+  - first:
+      1: 100052
+    second: B_Finger41_L
+  - first:
+      1: 100054
+    second: B_Finger41_R
+  - first:
+      1: 100056
+    second: B_Finger42_L
+  - first:
+      1: 100058
+    second: B_Finger42_R
+  - first:
+      1: 100060
+    second: B_Finger43_L
+  - first:
+      1: 100062
+    second: B_Finger43_R
+  - first:
+      1: 100064
+    second: B_Finger51_L
+  - first:
+      1: 100066
+    second: B_Finger51_R
+  - first:
+      1: 100068
+    second: B_Finger52_L
+  - first:
+      1: 100070
+    second: B_Finger52_R
+  - first:
+      1: 100072
+    second: B_Finger53_L
+  - first:
+      1: 100074
+    second: B_Finger53_R
+  - first:
+      1: 100076
+    second: B_Foot_L
+  - first:
+      1: 100078
+    second: B_Foot_R
+  - first:
+      1: 100080
+    second: B_Forearm_L
+  - first:
+      1: 100082
+    second: B_Forearm_R
+  - first:
+      1: 100084
+    second: B_Hair11
+  - first:
+      1: 100086
+    second: B_Hair12
+  - first:
+      1: 100088
+    second: B_Hair13
+  - first:
+      1: 100090
+    second: B_Hair14
+  - first:
+      1: 100092
+    second: B_Hair15
+  - first:
+      1: 100094
+    second: B_Hair16
+  - first:
+      1: 100096
+    second: B_Hair21
+  - first:
+      1: 100098
+    second: B_Hair22
+  - first:
+      1: 100100
+    second: B_Hair23
+  - first:
+      1: 100102
+    second: B_Hair31
+  - first:
+      1: 100104
+    second: B_Hair32
+  - first:
+      1: 100106
+    second: B_Hair33
+  - first:
+      1: 100108
+    second: B_Hair34
+  - first:
+      1: 100110
+    second: B_Hair41
+  - first:
+      1: 100112
+    second: B_Hair42
+  - first:
+      1: 100114
+    second: B_Hair43
+  - first:
+      1: 100116
+    second: B_Hand_L
+  - first:
+      1: 100118
+    second: B_Hand_R
+  - first:
+      1: 100120
+    second: B_Head
+  - first:
+      1: 100122
+    second: B_Hip
+  - first:
+      1: 100124
+    second: B_Neck
+  - first:
+      1: 100126
+    second: B_Shoulder_L
+  - first:
+      1: 100128
+    second: B_Shoulder_R
+  - first:
+      1: 100130
+    second: B_SwordCap
+  - first:
+      1: 100132
+    second: B_Thigh_L
+  - first:
+      1: 100134
+    second: B_Thigh_R
+  - first:
+      1: 100136
+    second: B_Toe_L
+  - first:
+      1: 100138
+    second: B_Toe_R
+  - first:
+      1: 100140
+    second: B_UpperArm_L
+  - first:
+      1: 100142
+    second: B_UpperArm_R
+  - first:
+      1: 100144
+    second: B_Waist
+  - first:
+      1: 100146
+    second: B_Weapon2
+  - first:
+      1: 100148
+    second: //RootNode
+  - first:
+      1: 100150
+    second: Root
+  - first:
+      4: 400000
+    second: B_Calf_L
+  - first:
+      4: 400002
+    second: B_Calf_R
+  - first:
+      4: 400004
+    second: B_Chest
+  - first:
+      4: 400006
+    second: B_Chest2
+  - first:
+      4: 400008
+    second: B_Eye_L
+  - first:
+      4: 400010
+    second: B_Eye_R
+  - first:
+      4: 400012
+    second: B_EyeUp_L
+  - first:
+      4: 400014
+    second: B_EyeUp_R
+  - first:
+      4: 400016
+    second: B_Finger11_L
+  - first:
+      4: 400018
+    second: B_Finger11_R
+  - first:
+      4: 400020
+    second: B_Finger12_L
+  - first:
+      4: 400022
+    second: B_Finger12_R
+  - first:
+      4: 400024
+    second: B_Finger13_L
+  - first:
+      4: 400026
+    second: B_Finger13_R
+  - first:
+      4: 400028
+    second: B_Finger21_L
+  - first:
+      4: 400030
+    second: B_Finger21_R
+  - first:
+      4: 400032
+    second: B_Finger22_L
+  - first:
+      4: 400034
+    second: B_Finger22_R
+  - first:
+      4: 400036
+    second: B_Finger23_L
+  - first:
+      4: 400038
+    second: B_Finger23_R
+  - first:
+      4: 400040
+    second: B_Finger31_L
+  - first:
+      4: 400042
+    second: B_Finger31_R
+  - first:
+      4: 400044
+    second: B_Finger32_L
+  - first:
+      4: 400046
+    second: B_Finger32_R
+  - first:
+      4: 400048
+    second: B_Finger33_L
+  - first:
+      4: 400050
+    second: B_Finger33_R
+  - first:
+      4: 400052
+    second: B_Finger41_L
+  - first:
+      4: 400054
+    second: B_Finger41_R
+  - first:
+      4: 400056
+    second: B_Finger42_L
+  - first:
+      4: 400058
+    second: B_Finger42_R
+  - first:
+      4: 400060
+    second: B_Finger43_L
+  - first:
+      4: 400062
+    second: B_Finger43_R
+  - first:
+      4: 400064
+    second: B_Finger51_L
+  - first:
+      4: 400066
+    second: B_Finger51_R
+  - first:
+      4: 400068
+    second: B_Finger52_L
+  - first:
+      4: 400070
+    second: B_Finger52_R
+  - first:
+      4: 400072
+    second: B_Finger53_L
+  - first:
+      4: 400074
+    second: B_Finger53_R
+  - first:
+      4: 400076
+    second: B_Foot_L
+  - first:
+      4: 400078
+    second: B_Foot_R
+  - first:
+      4: 400080
+    second: B_Forearm_L
+  - first:
+      4: 400082
+    second: B_Forearm_R
+  - first:
+      4: 400084
+    second: B_Hair11
+  - first:
+      4: 400086
+    second: B_Hair12
+  - first:
+      4: 400088
+    second: B_Hair13
+  - first:
+      4: 400090
+    second: B_Hair14
+  - first:
+      4: 400092
+    second: B_Hair15
+  - first:
+      4: 400094
+    second: B_Hair16
+  - first:
+      4: 400096
+    second: B_Hair21
+  - first:
+      4: 400098
+    second: B_Hair22
+  - first:
+      4: 400100
+    second: B_Hair23
+  - first:
+      4: 400102
+    second: B_Hair31
+  - first:
+      4: 400104
+    second: B_Hair32
+  - first:
+      4: 400106
+    second: B_Hair33
+  - first:
+      4: 400108
+    second: B_Hair34
+  - first:
+      4: 400110
+    second: B_Hair41
+  - first:
+      4: 400112
+    second: B_Hair42
+  - first:
+      4: 400114
+    second: B_Hair43
+  - first:
+      4: 400116
+    second: B_Hand_L
+  - first:
+      4: 400118
+    second: B_Hand_R
+  - first:
+      4: 400120
+    second: B_Head
+  - first:
+      4: 400122
+    second: B_Hip
+  - first:
+      4: 400124
+    second: B_Neck
+  - first:
+      4: 400126
+    second: B_Shoulder_L
+  - first:
+      4: 400128
+    second: B_Shoulder_R
+  - first:
+      4: 400130
+    second: B_SwordCap
+  - first:
+      4: 400132
+    second: B_Thigh_L
+  - first:
+      4: 400134
+    second: B_Thigh_R
+  - first:
+      4: 400136
+    second: B_Toe_L
+  - first:
+      4: 400138
+    second: B_Toe_R
+  - first:
+      4: 400140
+    second: B_UpperArm_L
+  - first:
+      4: 400142
+    second: B_UpperArm_R
+  - first:
+      4: 400144
+    second: B_Waist
+  - first:
+      4: 400146
+    second: B_Weapon2
+  - first:
+      4: 400148
+    second: //RootNode
+  - first:
+      4: 400150
+    second: Root
+  - first:
+      74: 7400000
+    second: MAN0001_Light_Atk03_00
+  - first:
+      95: 9500000
+    second: //RootNode
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -188,6 +496,7 @@ ModelImporter:
     - serializedVersion: 16
       name: MAN0001_Light_Atk03_00
       takeName: MAN0001_Light_Atk03_00
+      internalID: 7400000
       firstFrame: 0
       lastFrame: 45
       wrapMode: 0
@@ -208,35 +517,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0
-        functionName: OpenSwordEffect
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.23475133
-        functionName: UseSkill
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.4558817
-        functionName: StopSkill
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.66797924
-        functionName: CloseSwordEffect
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -247,6 +528,8 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -254,27 +537,31 @@ ModelImporter:
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.01
-    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 1
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -284,8 +571,8 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: B_Hip
-    rootMotionBoneRotation: {x: -0.5000003, y: 0.50000113, z: 0.49999967, w: -0.49999896}
     hasTranslationDoF: 1
     hasExtraRoot: 1
     skeletonHasParents: 1
@@ -293,6 +580,7 @@ ModelImporter:
     type: 3}
   animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 2
   additionalBone: 0
   userData: 
   assetBundleName: 

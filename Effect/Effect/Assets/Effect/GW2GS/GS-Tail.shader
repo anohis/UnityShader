@@ -77,18 +77,15 @@ Shader "Custom/GS-Tail"
 
 				float noise = PerlinNormal(i.worldPos);
 
-				float refractRatio = max(min(_RefractRatio, 1), -1);
-				refractRatio = _RefractRatio;
+				float refractRatio = max(min(_RefractRatio + noise, 1), -1);
 
-				fixed3 worldRefr = refract(-normalize(i.worldViewDir), normalize(i.worldNormal), refractRatio);
+				float dir = sign(dot(i.worldNormal, i.worldViewDir));
+
+				fixed3 worldRefr = refract(-normalize(i.worldViewDir), normalize(i.worldNormal) * dir, refractRatio);
 
 				fixed4 color = texCUBE(_Cubemap, worldRefr);
 
-				//return fixed4(GetColor(color.rgb), alpha);
-
-				float3 worldNormal = normalize(i.worldNormal);
-
-				return fixed4(worldNormal.x, worldNormal.y, worldNormal.z, 1);
+				return fixed4(GetColor(color.rgb), alpha);
 			}
 			ENDCG
 		}

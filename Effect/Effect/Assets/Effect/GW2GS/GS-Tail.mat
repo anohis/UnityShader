@@ -31,15 +31,15 @@ Material:
     - _AlphaMax: 0.05
     - _AlphaMin: 0
     - _AlphaTest: 0
-    - _Amplitude: 0
+    - _Amplitude: 0.02
     - _Brightness: 1
     - _Contrast: 3
-    - _Frequency: 0
-    - _Lacunarity: 0
+    - _Frequency: 10
+    - _Lacunarity: 1
     - _Octaves: 1
-    - _Persistence: 0
+    - _Persistence: 1
     - _RefractAmount: 1
-    - _RefractRatio: 0.1
+    - _RefractRatio: 0.99
     - _Saturation: 1
     m_Colors:
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
