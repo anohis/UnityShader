@@ -375,6 +375,7 @@ MonoBehaviour:
   _c: 0
   _d: 0.8
   _normalLerp: 0.5
+  _captureInterval: 0.06
   _renderSections: []
 --- !u!1 &518303729
 GameObject:

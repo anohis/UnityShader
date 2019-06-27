@@ -19,6 +19,7 @@ namespace Effect.GS
         [SerializeField] private float _c;
         [SerializeField] private float _d;
         [SerializeField] private float _normalLerp;
+        [SerializeField] private float _captureInterval;
 
         private const int _interpolationCount = 4;
 
@@ -80,8 +81,10 @@ namespace Effect.GS
             {
                 _time = 0;
 
-                CaptureTail();
-                Interpolate();
+                if (CaptureTail())
+                {
+                    Interpolate();
+                }
             }
             DrawTail();
         }
@@ -98,8 +101,20 @@ namespace Effect.GS
                         _tailSections[baseIdx + 2],
                         _tailSections[baseIdx + 3]);
         }
-        private void CaptureTail()
+        private bool CaptureTail()
         {
+            if (_tailSections.Count > 1)
+            {
+                var last = _tailSections[_tailSections.Count - 1];
+
+                float dis = Vector3.Distance(last.PointA, PointA) + Vector3.Distance(last.PointB, PointB);
+
+                if (_captureInterval > dis)
+                {
+                    return false;
+                }
+            }
+
             var newTailSection = new TailSection()
             {
                 PointA = PointA,
@@ -108,6 +123,8 @@ namespace Effect.GS
             };
 
             _tailSections.Add(newTailSection);
+
+            return true;
         }
         private void UpdateTailTime(List<TailSection> tails)
         {

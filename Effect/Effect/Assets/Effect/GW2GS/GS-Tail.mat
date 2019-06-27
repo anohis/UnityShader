@@ -30,10 +30,10 @@ Material:
     m_Floats:
     - _AlphaMax: 0.05
     - _AlphaMin: 0
-    - _AlphaRange: 0.05
+    - _AlphaRange: 0.25
     - _AlphaTest: 0
     - _Amplitude: 0.02
-    - _Brightness: 1
+    - _Brightness: 2
     - _Contrast: 3
     - _Frequency: 10
     - _Lacunarity: 1
