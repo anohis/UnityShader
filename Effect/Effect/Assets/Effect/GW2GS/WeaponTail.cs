@@ -164,8 +164,10 @@ namespace Effect.GS
 
                 float timeRate = Mathf.Clamp01((Time.time - currentSection.Time) / _during);
                 float distanceRate = Mathf.Clamp01(1 - currentSection.Distance / length);
-                float u = (timeRate + distanceRate) / 2;
+                float u = (timeRate + distanceRate) * 0.5f;
                 u = _alphaCurve.Evaluate(u);
+
+                currentSection.AttenuateValue += 0.5f * Time.deltaTime * Mathf.PerlinNoise(currentSection.Time, currentSection.Time);
 
                 _uvs2[indexA] = Vector2.one * u;
                 _uvs2[indexB] = Vector2.one * u;
@@ -234,14 +236,16 @@ namespace Effect.GS
                     }
                 }
 
-                var noise = Mathf.Clamp01(Mathf.PerlinNoise(_positionCache[i].x, _positionCache[i].y));
+                var time = Mathf.Lerp(t1.Time, t2.Time, (float)i / count);
+
+                var noise = Mathf.Clamp01(Mathf.PerlinNoise(time, time));
                 noise = noise * _a + _b;
 
                 var tail = new TailSection()
                 {
                     PointA = pointA,
                     PointB = pointB,
-                    Time = Mathf.Lerp(t1.Time, t2.Time, (float)i / count),
+                    Time = time,
                     UVA = new Vector2(noise, _c),
                     UVB = new Vector2(noise, _d),
                 };
@@ -256,9 +260,12 @@ namespace Effect.GS
             float t2 = GetT(t1, p1, p2);
             float t3 = GetT(t2, p2, p3);
 
-            if (t0 == t1) t1 += 0.001f;
-            if (t1 == t2) t2 += 0.001f;
-            if (t2 == t3) t3 += 0.001f;
+            if (t0 == t1)
+                t1 += 0.001f;
+            if (t1 == t2)
+                t2 += 0.001f;
+            if (t2 == t3)
+                t3 += 0.001f;
 
             int count = 0;
 
@@ -313,7 +320,8 @@ namespace Effect.GS
 
                 var distance = CalculateDistance(last.PointA, last.PointB, current.PointA, current.PointB);
                 length += distance;
-                current.Distance = length;
+                //if (current.Distance == 0)
+                    current.Distance = length;
             }
 
             return length;
