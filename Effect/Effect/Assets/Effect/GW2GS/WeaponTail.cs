@@ -34,7 +34,6 @@ namespace Effect.GS
         private float _time;
 
         private Vector3[] _vertices;
-        private Color[] _colors;
         private Vector2[] _uvs;
         private Vector2[] _uvs2;
         private int[] _triangles;
@@ -107,7 +106,7 @@ namespace Effect.GS
             {
                 var last = _tailSections[_tailSections.Count - 1];
 
-                float dis = Vector3.Distance(last.PointA, PointA) + Vector3.Distance(last.PointB, PointB);
+                float dis = CalculateDistance(last.PointA, last.PointB, PointA, PointB);
 
                 if (_captureInterval > dis)
                 {
@@ -144,10 +143,11 @@ namespace Effect.GS
             _mesh.Clear();
 
             _vertices = new Vector3[VerticeCount];
-            _colors = new Color[VerticeCount];
             _uvs = new Vector2[VerticeCount];
             _uvs2 = new Vector2[VerticeCount];
             Vector3[] normals = new Vector3[VerticeCount];
+
+            var length = CalculateLength();
 
             for (var i = 0; i < _renderSections.Count; i++)
             {
@@ -162,14 +162,13 @@ namespace Effect.GS
                 _uvs[indexA] = currentSection.UVA;
                 _uvs[indexB] = currentSection.UVB;
 
-                float u = Mathf.Clamp01((Time.time - currentSection.Time) / _during);
+                float timeRate = Mathf.Clamp01((Time.time - currentSection.Time) / _during);
+                float distanceRate = Mathf.Clamp01(1 - currentSection.Distance / length);
+                float u = (timeRate + distanceRate) / 2;
                 u = _alphaCurve.Evaluate(u);
+
                 _uvs2[indexA] = Vector2.one * u;
                 _uvs2[indexB] = Vector2.one * u;
-
-                Color interpolatedColor = Color.Lerp(Color.blue, Color.red, u);
-                _colors[indexA] = interpolatedColor;
-                _colors[indexB] = interpolatedColor;
 
                 if (i > 1)
                 {
@@ -198,7 +197,6 @@ namespace Effect.GS
             }
 
             _mesh.vertices = _vertices;
-            _mesh.colors = _colors;
             _mesh.uv = _uvs;
             _mesh.uv2 = _uvs2;
             _mesh.triangles = triangles;
@@ -220,11 +218,6 @@ namespace Effect.GS
             var countA = CatmulRom(t0.PointA, t1.PointA, t2.PointA, t3.PointA, _positionCache);
             var countB = CatmulRom(t0.PointB, t1.PointB, t2.PointB, t3.PointB, _positionCache);
 
-            if (countA != countB)
-            {
-                //Debug.LogError("[WeaponTail.CatmulRom]countA != countB");
-            }
-
             var count = Mathf.Min(countA, countB);
             for (int i = 0; i < count; i++)
             {
@@ -234,6 +227,7 @@ namespace Effect.GS
                 if (_renderSections.Count > 1)
                 {
                     var last = _renderSections[_renderSections.Count - 1];
+
                     if (last.PointA == pointA && last.PointB == pointB)
                     {
                         continue;
@@ -298,6 +292,31 @@ namespace Effect.GS
             float c = Mathf.Pow(b, _alpha);
 
             return (c + t);
+        }
+        private float CalculateDistance(Vector3 a0, Vector3 b0, Vector3 a1, Vector3 b1)
+        {
+            return Vector3.Distance((a0 + b0) / 2, (a1 + b1) / 2);
+        }
+        private float CalculateLength()
+        {
+            float length = 0;
+
+            if (_renderSections.Count > 1)
+            {
+                _renderSections[0].Distance = 0;
+            }
+
+            for (int i = 1; i < _renderSections.Count; i++)
+            {
+                var last = _renderSections[i - 1];
+                var current = _renderSections[i];
+
+                var distance = CalculateDistance(last.PointA, last.PointB, current.PointA, current.PointB);
+                length += distance;
+                current.Distance = length;
+            }
+
+            return length;
         }
     }
 }

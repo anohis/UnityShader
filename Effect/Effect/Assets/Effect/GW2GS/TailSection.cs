@@ -12,5 +12,6 @@ namespace Effect.GS
         public float Time;
         public Vector2 UVA;
         public Vector2 UVB;
+        public float Distance;
     }
 }
