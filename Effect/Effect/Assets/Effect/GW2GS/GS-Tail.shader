@@ -78,7 +78,7 @@ Shader "Custom/GS-Tail"
 				alpha = max(alpha, 0);
 				alpha = min(alpha / _AlphaRange, 1);
 
-				float noise = PerlinNormal(i.worldPos);
+				float noise = PerlinNormal(i.worldPos + _Time.x);
 				float refractRatio = max(min(_RefractRatio + noise, 1), -1);
 				float dir = sign(dot(i.worldNormal, i.worldViewDir));
 
