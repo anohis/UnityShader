@@ -18,6 +18,7 @@ namespace Effect.GS
         [SerializeField] private float _b;
         [SerializeField] private float _c;
         [SerializeField] private float _d;
+        [SerializeField] private float _attenuatePower = 100;
         [SerializeField] private float _normalLerp;
         [SerializeField] private float _captureInterval;
 
@@ -162,12 +163,14 @@ namespace Effect.GS
                 _uvs[indexA] = currentSection.UVA;
                 _uvs[indexB] = currentSection.UVB;
 
-                float timeRate = Mathf.Clamp01((Time.time - currentSection.Time) / _during);
+                var noise = Mathf.Clamp01(Mathf.PerlinNoise(currentSection.Time * _attenuatePower, 0.5f));
+                currentSection.AttenuateValue += Time.deltaTime * noise;
+
+                float timeRate = Mathf.Clamp01((Time.time + currentSection.AttenuateValue - currentSection.Time) / _during);
                 float distanceRate = Mathf.Clamp01(1 - currentSection.Distance / length);
                 float u = (timeRate + distanceRate) * 0.5f;
                 u = _alphaCurve.Evaluate(u);
 
-                currentSection.AttenuateValue += 0.5f * Time.deltaTime * Mathf.PerlinNoise(currentSection.Time, currentSection.Time);
 
                 _uvs2[indexA] = Vector2.one * u;
                 _uvs2[indexB] = Vector2.one * u;
