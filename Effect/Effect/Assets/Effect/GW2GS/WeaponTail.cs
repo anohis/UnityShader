@@ -21,6 +21,7 @@ namespace Effect.GS
         [SerializeField] private float _attenuatePower = 100;
         [SerializeField] private float _normalLerp;
         [SerializeField] private float _captureInterval;
+        [SerializeField] private float _rateLerp;
 
         private const int _interpolationCount = 4;
 
@@ -163,14 +164,14 @@ namespace Effect.GS
                 _uvs[indexA] = currentSection.UVA;
                 _uvs[indexB] = currentSection.UVB;
 
-                var noise = Mathf.Clamp01(Mathf.PerlinNoise(currentSection.Time * _attenuatePower, 0.5f));
+                float distanceRate = Mathf.Clamp01(1 - currentSection.Distance / length);
+
+                var noise = Mathf.Clamp01(Mathf.PerlinNoise(distanceRate * _attenuatePower, 0.5f));
                 currentSection.AttenuateValue += Time.deltaTime * noise;
 
                 float timeRate = Mathf.Clamp01((Time.time + currentSection.AttenuateValue - currentSection.Time) / _during);
-                float distanceRate = Mathf.Clamp01(1 - currentSection.Distance / length);
-                float u = (timeRate + distanceRate) * 0.5f;
+                float u = (timeRate + distanceRate) * _rateLerp;
                 u = _alphaCurve.Evaluate(u);
-
 
                 _uvs2[indexA] = Vector2.one * u;
                 _uvs2[indexB] = Vector2.one * u;
@@ -241,7 +242,7 @@ namespace Effect.GS
 
                 var time = Mathf.Lerp(t1.Time, t2.Time, (float)i / count);
 
-                var noise = Mathf.Clamp01(Mathf.PerlinNoise(time, time));
+                var noise = Mathf.Clamp01(Mathf.PerlinNoise(time, 0.5f));
                 noise = noise * _a + _b;
 
                 var tail = new TailSection()
