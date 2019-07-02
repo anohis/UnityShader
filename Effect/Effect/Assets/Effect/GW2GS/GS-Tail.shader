@@ -22,9 +22,10 @@ Shader "Custom/GS-Tail"
     }
     SubShader
     {
-		
 		Pass
 		{
+			Cull off
+
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
@@ -91,7 +92,6 @@ Shader "Custom/GS-Tail"
 			samplerCUBE _Cubemap;
 			float _RefractRatio;
 			float _AlphaRange;
-			float _AlphaTest;
 
 			struct appdata
 			{
@@ -129,19 +129,20 @@ Shader "Custom/GS-Tail"
 				alpha = max(alpha, 0);
 				alpha = min(alpha / _AlphaRange, 1);
 
-				clip(alpha - (1 - _AlphaTest));
+				float3 worldNormal = normalize(i.worldNormal);
+				float3 worldViewDir = normalize(i.worldViewDir);
 
 				float noise = PerlinNormal(i.worldPos + _Time.x);
-				float refractRatio = max(min(_RefractRatio + noise, 1), -1);
-				float dir = sign(dot(i.worldNormal, i.worldViewDir));
+				float refractRatio = max(min(_RefractRatio + noise, 1), 0);
+				float dotNV = dot(worldNormal, worldViewDir);
+				float dir = sign(dotNV) * abs(dotNV);
 
-				fixed3 worldRefr = refract(-normalize(i.worldViewDir), normalize(i.worldNormal) * dir, refractRatio);
+				fixed3 worldRefr = refract(-worldViewDir, worldNormal * dir, refractRatio);
 				fixed4 color = texCUBE(_Cubemap, worldRefr);
 
 				return fixed4(GetColor(color.rgb), alpha);
 			}
 			ENDCG
 		}
-		
     }
 }
