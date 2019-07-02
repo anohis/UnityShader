@@ -5,6 +5,7 @@ Shader "Custom/GS-Tail"
 		_MainTex("Texture", 2D) = "white" {}
 		_Cubemap("Cubemap", Cube) = "" {}
 		_AlphaRange("AlphaRange", Range(0,1)) = 0.1
+		_AlphaTest("AlphaTest", Range(0,1)) = 0.1
 
 		_Brightness("Brightness", Float) = 1
 		_Saturation("Saturation", Float) = 1
@@ -21,6 +22,56 @@ Shader "Custom/GS-Tail"
     }
     SubShader
     {
+		
+		Pass
+		{
+			CGPROGRAM
+			#pragma vertex vert
+			#pragma fragment frag
+
+			#include "UnityCG.cginc"
+
+			sampler2D _MainTex;
+			float4 _MainTex_ST;
+			float _AlphaRange;
+			float _AlphaTest;
+
+			struct appdata
+			{
+				float4 vertex : POSITION;
+				float2 uv : TEXCOORD0;
+				float2 uv2 : TEXCOORD1;
+			};
+
+			struct v2f
+			{
+				float4 pos : SV_POSITION;
+				float2 uv : TEXCOORD3;
+				float2 uv2 : TEXCOORD4;
+			};
+
+			v2f vert(appdata v)
+			{
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+				o.uv = v.uv * _MainTex_ST.xy + _MainTex_ST.zw;
+				o.uv2 = v.uv2;
+				return o;
+			}
+
+			fixed4 frag(v2f i) : SV_Target
+			{
+				fixed alpha = tex2D(_MainTex, i.uv).a - i.uv2.x;
+				alpha = max(alpha, 0);
+				alpha = min(alpha / _AlphaRange, 1);
+
+				clip(alpha - _AlphaTest);
+
+				return fixed4(alpha, alpha, alpha, alpha);
+			}
+			ENDCG
+		}
+		
 		Pass
 		{
 			Cull off
@@ -35,12 +86,12 @@ Shader "Custom/GS-Tail"
 			#include "Assets/Hsv.cginc"
 			#include "Assets/Noise.cginc"
 
-
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
 			samplerCUBE _Cubemap;
 			float _RefractRatio;
 			float _AlphaRange;
+			float _AlphaTest;
 
 			struct appdata
 			{
@@ -78,6 +129,8 @@ Shader "Custom/GS-Tail"
 				alpha = max(alpha, 0);
 				alpha = min(alpha / _AlphaRange, 1);
 
+				clip(alpha - (1 - _AlphaTest));
+
 				float noise = PerlinNormal(i.worldPos + _Time.x);
 				float refractRatio = max(min(_RefractRatio + noise, 1), -1);
 				float dir = sign(dot(i.worldNormal, i.worldViewDir));
@@ -89,5 +142,6 @@ Shader "Custom/GS-Tail"
 			}
 			ENDCG
 		}
+		
     }
 }

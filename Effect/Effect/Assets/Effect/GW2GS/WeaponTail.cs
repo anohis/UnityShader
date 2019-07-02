@@ -164,12 +164,11 @@ namespace Effect.GS
                 _uvs[indexA] = currentSection.UVA;
                 _uvs[indexB] = currentSection.UVB;
 
-                float distanceRate = Mathf.Clamp01(1 - currentSection.Distance / length);
-
-                var noise = Mathf.Clamp01(Mathf.PerlinNoise(distanceRate * _attenuatePower, 0.5f));
+                var noise = Mathf.Clamp01(Mathf.PerlinNoise(currentSection.Distance * _attenuatePower, 0.5f));
                 currentSection.AttenuateValue += Time.deltaTime * noise;
 
                 float timeRate = Mathf.Clamp01((Time.time + currentSection.AttenuateValue - currentSection.Time) / _during);
+                float distanceRate = Mathf.Clamp01(1 - currentSection.Distance / length);
                 float u = (timeRate + distanceRate) * _rateLerp;
                 u = _alphaCurve.Evaluate(u);
 
