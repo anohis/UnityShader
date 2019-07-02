@@ -1,9 +1,9 @@
-# 隨便寫寫 Shader
-短期內不會再修正
+# Unity Shader
 * 需要更系統的管理
 
 ## GW2GS
 嘗試模擬GW2的武器Twilight效果
+![image](https://github.com/anohis/UnityShader/blob/master/Image/GW2GS.jpg)
 
 ## Block
 物體方塊化後變成光束消失(或者倒著演出)
