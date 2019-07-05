@@ -5,12 +5,11 @@ using UnityEngine;
 public class RotateAround : MonoBehaviour
 {
     public Transform Target;
-    public float Distance;
-    public Vector3 Speed;
+    public Vector3 Axis;
+    public float Speed;
 
     private void LateUpdate()
     {
-        Quaternion rotation = Quaternion.Euler(Speed * Time.deltaTime);
-        transform.position = rotation * transform.position + Target.position;
+        transform.RotateAround(Target.position, Axis, Speed * Time.deltaTime);
     }
 }

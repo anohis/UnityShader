@@ -295,7 +295,6 @@ GameObject:
   - component: {fileID: 864086656}
   - component: {fileID: 864086655}
   - component: {fileID: 864086658}
-  - component: {fileID: 864086659}
   m_Layer: 0
   m_Name: Earth
   m_TagString: Untagged
@@ -382,22 +381,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &864086659
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 864086654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed1a0aeae6e330e43a1be8e15a2a85ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Target: {fileID: 882487993}
-  Distance: 30
-  Axis: {x: 0, y: 1, z: 0}
-  Speed: 1
 --- !u!1 &882487991
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,6 +391,7 @@ GameObject:
   m_Component:
   - component: {fileID: 882487993}
   - component: {fileID: 882487992}
+  - component: {fileID: 882487994}
   m_Layer: 0
   m_Name: Sun
   m_TagString: Untagged
@@ -489,6 +473,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &882487994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882487991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed1a0aeae6e330e43a1be8e15a2a85ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: {fileID: 864086657}
+  Axis: {x: 0, y: 1, z: 0}
+  Speed: 100
 --- !u!1 &1279170685
 GameObject:
   m_ObjectHideFlags: 0
