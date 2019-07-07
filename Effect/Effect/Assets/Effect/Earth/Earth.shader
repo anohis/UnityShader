@@ -9,13 +9,10 @@
 		_HeightMap("Height Map", 2D) = "white" {}
 		_Parallax("Parallax", float) = 0
 		_NightMap("Night Map", 2D) = "white" {}
-		_AtmosphereColor("AtmosphereColor", Color) = (1, 1, 1, 1)
 
-
-		_Diffuse("Diffuse", Color) = (1,1,1,1)
-		_RimColor("RimColor", Color) = (1,1,1,1)
-		_RimPower("RimPower", Range(0.000001, 3.0)) = 0.1
-		_AlphaPower("AlphaPower", Range(0, 1.0)) = 0
+		_AtmosphereColorMap("Atmosphere Color Map", 2D) = "white" {}
+		_ViewPower("View Power", Float) = 5
+		_TransitionWidth("Transition Width", Range(0.1, 0.5)) = 0.15
     }
     SubShader
     {
@@ -96,28 +93,29 @@
 
 				fixed3 albedo = tex2D(_MainTex, i.uv.xy + parallaxOffset).rgb * _Color.rgb;
 				float dotNL = 0.5 * dot(tangentNormal, tangentLightDir) + 0.5;
-				fixed3 diffuse = _LightColor0.rgb * albedo * dotNL;
-				fixed3 night = (1 - dotNL) * tex2D(_NightMap, i.uv2.zw + parallaxOffset).rgb;
+				fixed3 diffuse = _LightColor0.rgb * albedo * dot(tangentNormal, tangentLightDir);
+				fixed3 night = (1.25 - dotNL) * tex2D(_NightMap, i.uv2.zw + parallaxOffset).rgb;
 
 				return fixed4(diffuse + night, 1.0);
             }
             ENDCG
         }
-
+		
 		Pass
 		{
 			Tags{ "LightMode" = "ForwardBase" }
+			Cull Back
 			Zwrite Off
 			Blend SrcAlpha OneMinusSrcAlpha
 
 			CGPROGRAM
 			#include "Lighting.cginc" 
 
-			fixed4 _Diffuse;
-			fixed4 _RimColor;
-			float _RimPower;
-			float _AlphaPower;
-			float3 _ViewPos;
+			static const float PI = 3.14159265f;
+			
+			sampler2D _AtmosphereColorMap;
+			float _ViewPower;
+			float _TransitionWidth;
 
 			#pragma vertex vert  
 			#pragma fragment frag     
@@ -138,25 +136,30 @@
 			v2f vert(a2v v)
 			{
 				v2f o;
-				o.pos = UnityObjectToClipPos(v.vertex + v.normal);
-				o.worldNormal = mul(v.normal, (float3x3)unity_WorldToObject);
+				o.pos = UnityObjectToClipPos(v.vertex + 0.1 * v.normal);
+				o.worldNormal = UnityObjectToWorldNormal(v.normal);
 				float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-				o.worldViewDir = _WorldSpaceCameraPos - worldPos;
+				o.worldViewDir = UnityWorldSpaceViewDir(worldPos);
+
 				return o;
 			}
 
 			fixed4 frag(v2f i) : SV_Target
 			{
-				fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * _Diffuse.xyz;
-				fixed3 worldNormal = normalize(i.worldNormal);
-				fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
-				fixed3 lambert = 0.5 * dot(worldNormal, worldLightDir) + 0.5;
-				fixed3 diffuse = lambert * _Diffuse.xyz * _LightColor0.xyz + ambient;
-
+				float3 worldNormal = normalize(i.worldNormal);
+				float3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
 				float3 worldViewDir = normalize(i.worldViewDir);
-				float rim = max(0, dot(worldViewDir, worldNormal));
-				fixed3 rimColor = _RimColor * pow(rim, 1 / _RimPower);
-				return fixed4(rimColor, max(0, 1 - rim - _AlphaPower));
+
+				float angleNL = acos(dot(worldLightDir, worldNormal)) / PI;
+				float NLFactor = 1 - clamp(angleNL - 0.5, 0, _TransitionWidth) / _TransitionWidth;
+				//float NLFactor = pow(1 - angleNL, 2);
+				float angleNV = acos(dot(worldNormal, worldViewDir)) / PI;
+				float NVFactor = pow(angleNV + 0.5, _ViewPower);
+
+				fixed4 color = _LightColor0 * NLFactor * NVFactor;
+				color = color * tex2D(_AtmosphereColorMap, float2(angleNL, 0));
+
+				return color;
 			}
 			ENDCG
 		}
