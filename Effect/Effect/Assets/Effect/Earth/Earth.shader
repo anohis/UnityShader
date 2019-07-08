@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
 Shader "Custom/Earth"
 {
     Properties
@@ -7,7 +9,7 @@ Shader "Custom/Earth"
 		_BumpMap("Normap Map", 2D) = "bump" {}
 		_BumpScale("Bump Scale", Float) = 1.0
 		_HeightMap("Height Map", 2D) = "white" {}
-		_Parallax("Parallax", float) = 0
+		_HeightScale("Height Scale", float) = 0
 		_NightMap("Night Map", 2D) = "white" {}
 		_CloudMap("Cloud Map", 2D) = "white" {}
 
@@ -28,19 +30,17 @@ Shader "Custom/Earth"
             #include "UnityCG.cginc"
 			#include "Lighting.cginc"
 
+			static const float PI = 3.14159265f;
+
 			fixed4 _Color;
 			sampler2D _MainTex;
-			float4 _MainTex_ST;
 			sampler2D _BumpMap;
-			float4 _BumpMap_ST;
 			sampler2D _HeightMap;
-			float4 _HeightMap_ST;
 			sampler2D _NightMap;
-			float4 _NightMap_ST;
 			sampler2D _CloudMap;
-			float4 _Cloud_ST;
 			float _BumpScale;
-			float _Parallax;
+			float _HeightScale;
+			float _TransitionWidth;
 
             struct appdata
             {
@@ -53,54 +53,64 @@ Shader "Custom/Earth"
             struct v2f
             {
 				float4 pos : SV_POSITION;
-				float4 uv : TEXCOORD0;
-				float4 uv2 : TEXCOORD1;
-				float3 lightDir : TEXCOORD2;
-				float3 viewDir : TEXCOORD3;
-				float3 normalDir : TEXCOORD4;
+				float2 uv : TEXCOORD0;
+				float4 TtoW0 : TEXCOORD1;
+				float4 TtoW1 : TEXCOORD2;
+				float4 TtoW2 : TEXCOORD3;
+				float3 viewDir : TEXCOORD4;
             };
 
             v2f vert (appdata v)
             {
                 v2f o;
                 o.pos = UnityObjectToClipPos(v.vertex);
-				o.uv.xy = v.uv.xy * _MainTex_ST.xy + _MainTex_ST.zw;
-				o.uv.zw = v.uv.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
-				o.uv2.xy = v.uv.xy * _HeightMap_ST.xy + _HeightMap_ST.zw;
-				o.uv2.zw = v.uv.xy * _NightMap_ST.xy + _NightMap_ST.zw;
+				o.uv = v.uv;
+
+				float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+				fixed3 worldNormal = UnityObjectToWorldNormal(v.normal);
+				fixed3 worldTangent = UnityObjectToWorldDir(v.tangent.xyz);
+				fixed3 worldBinormal = cross(worldNormal, worldTangent) * v.tangent.w;
+
+				o.TtoW0 = float4(worldTangent.x, worldBinormal.x, worldNormal.x, worldPos.x);
+				o.TtoW1 = float4(worldTangent.y, worldBinormal.y, worldNormal.y, worldPos.y);
+				o.TtoW2 = float4(worldTangent.z, worldBinormal.z, worldNormal.z, worldPos.z);
 
 				TANGENT_SPACE_ROTATION;
 
-				o.lightDir = mul(rotation, ObjSpaceLightDir(v.vertex)).xyz;
-				o.viewDir = mul(rotation, ObjSpaceViewDir(v.vertex)).xyz;
-				o.normalDir = mul(rotation, v.normal).xyz;
+				o.viewDir = mul(rotation, normalize(ObjSpaceViewDir(v.vertex))).xyz;
 
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
-            {
-				fixed3 tangentLightDir = normalize(i.lightDir);
+			{
+				float3 worldPos = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
+				fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(worldPos));
+				fixed3 worldViewDir = normalize(UnityWorldSpaceViewDir(worldPos));
+				fixed3 worldNormal = fixed3(i.TtoW0.z, i.TtoW1.z, i.TtoW2.z);
+
 				fixed3 tangentViewDir = normalize(i.viewDir);
-				fixed3 tangentNormalDir = normalize(i.normalDir);
 
-				float heightTex = tex2D(_HeightMap, i.uv2.xy).r;
-				float2 parallaxOffset = ParallaxOffset(heightTex, _Parallax, tangentViewDir);
+				float height = tex2D(_HeightMap, i.uv);
+				float2 parallaxOffset = ParallaxOffset(height, _HeightScale, tangentViewDir);
 
-				fixed4 packedNormal = tex2D(_BumpMap, i.uv.zw + parallaxOffset);
-				fixed3 tangentNormal;
+				fixed3 newNormalDir = UnpackNormal(tex2D(_BumpMap, i.uv + parallaxOffset));
+				newNormalDir.xy *= _BumpScale;
+				newNormalDir.z = sqrt(1.0 - saturate(dot(newNormalDir.xy, newNormalDir.xy)));
+				newNormalDir = normalize(half3(dot(i.TtoW0.xyz, newNormalDir), dot(i.TtoW1.xyz, newNormalDir), dot(i.TtoW2.xyz, newNormalDir)));
 
-				tangentNormal = UnpackNormal(packedNormal);
-				tangentNormal.xy *= _BumpScale;
-				tangentNormal.z = sqrt(1.0 - saturate(dot(tangentNormal.xy, tangentNormal.xy)));
+				float angleNL = acos(dot(worldLightDir, newNormalDir)) / PI;
+				float NLFactor = max(0, 1 - angleNL - (0.5 - 0.5 * _TransitionWidth)) / (1 - 0.5 * _TransitionWidth);
+				
+				fixed3 diffuse = NLFactor * tex2D(_MainTex, i.uv + parallaxOffset).rgb;
+				fixed3 cloud = tex2D(_CloudMap, i.uv);
+				fixed3 night = max(0, -(NLFactor - (0.5 - 0.5 * _TransitionWidth)) / (0.5 - 0.5 * _TransitionWidth)) * (1 - cloud.r) * tex2D(_NightMap, i.uv + parallaxOffset).rgb;
+				cloud *= NLFactor;
 
-				fixed3 albedo = tex2D(_MainTex, i.uv.xy + parallaxOffset).rgb * _Color.rgb;
-				float dotNL = max(0, dot(tangentNormal, tangentLightDir));
-				fixed3 diffuse = _LightColor0.rgb * albedo * dotNL;
-				fixed3 night = (1 - dotNL) * tex2D(_NightMap, i.uv2.zw + parallaxOffset).rgb;
+				fixed4 color = fixed4(diffuse + night + cloud, 1.0);
 
-				return fixed4(diffuse + night, 1.0);
-            }
+				return color;
+			}
             ENDCG
         }
 		
@@ -154,10 +164,10 @@ Shader "Custom/Earth"
 				float3 worldViewDir = normalize(i.worldViewDir);
 
 				float angleNL = acos(dot(worldLightDir, worldNormal)) / PI;
-				float NLFactor = 1 - clamp(angleNL - 0.5, 0, _TransitionWidth) / _TransitionWidth;
+				float NLFactor = 1 - max(0, min(1, (angleNL - 0.5) / _TransitionWidth));
 				float angleNV = acos(dot(worldNormal, worldViewDir)) / PI;
 				float angleLV = acos(dot(worldLightDir, worldViewDir)) / PI;
-				float NVFactor = pow(angleNV + 0.5, _ViewPower * (1 - angleLV));
+				float NVFactor = pow(angleNV + 0.5, _ViewPower * pow(1 - angleLV, 2));
 
 				fixed4 color = _LightColor0 * NLFactor * NVFactor;
 				color = color * tex2D(_AtmosphereColorMap, float2(angleNL, 0));
