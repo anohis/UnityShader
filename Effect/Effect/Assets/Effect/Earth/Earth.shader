@@ -1,4 +1,4 @@
-﻿Shader "Custom/Earth"
+Shader "Custom/Earth"
 {
     Properties
     {
@@ -9,6 +9,7 @@
 		_HeightMap("Height Map", 2D) = "white" {}
 		_Parallax("Parallax", float) = 0
 		_NightMap("Night Map", 2D) = "white" {}
+		_CloudMap("Cloud Map", 2D) = "white" {}
 
 		_AtmosphereColorMap("Atmosphere Color Map", 2D) = "white" {}
 		_ViewPower("View Power", Float) = 5
@@ -36,6 +37,8 @@
 			float4 _HeightMap_ST;
 			sampler2D _NightMap;
 			float4 _NightMap_ST;
+			sampler2D _CloudMap;
+			float4 _Cloud_ST;
 			float _BumpScale;
 			float _Parallax;
 
@@ -92,9 +95,9 @@
 				tangentNormal.z = sqrt(1.0 - saturate(dot(tangentNormal.xy, tangentNormal.xy)));
 
 				fixed3 albedo = tex2D(_MainTex, i.uv.xy + parallaxOffset).rgb * _Color.rgb;
-				float dotNL = 0.5 * dot(tangentNormal, tangentLightDir) + 0.5;
-				fixed3 diffuse = _LightColor0.rgb * albedo * dot(tangentNormal, tangentLightDir);
-				fixed3 night = (1.25 - dotNL) * tex2D(_NightMap, i.uv2.zw + parallaxOffset).rgb;
+				float dotNL = max(0, dot(tangentNormal, tangentLightDir));
+				fixed3 diffuse = _LightColor0.rgb * albedo * dotNL;
+				fixed3 night = (1 - dotNL) * tex2D(_NightMap, i.uv2.zw + parallaxOffset).rgb;
 
 				return fixed4(diffuse + night, 1.0);
             }
@@ -152,9 +155,9 @@
 
 				float angleNL = acos(dot(worldLightDir, worldNormal)) / PI;
 				float NLFactor = 1 - clamp(angleNL - 0.5, 0, _TransitionWidth) / _TransitionWidth;
-				//float NLFactor = pow(1 - angleNL, 2);
 				float angleNV = acos(dot(worldNormal, worldViewDir)) / PI;
-				float NVFactor = pow(angleNV + 0.5, _ViewPower);
+				float angleLV = acos(dot(worldLightDir, worldViewDir)) / PI;
+				float NVFactor = pow(angleNV + 0.5, _ViewPower * (1 - angleLV));
 
 				fixed4 color = _LightColor0 * NLFactor * NVFactor;
 				color = color * tex2D(_AtmosphereColorMap, float2(angleNL, 0));
