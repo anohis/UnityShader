@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
 Shader "Custom/Earth"
 {
     Properties
@@ -149,7 +147,7 @@ Shader "Custom/Earth"
 			v2f vert(a2v v)
 			{
 				v2f o;
-				o.pos = UnityObjectToClipPos(v.vertex + 0.1 * v.normal);
+				o.pos = UnityObjectToClipPos(v.vertex + 0.2 * v.normal);
 				o.worldNormal = UnityObjectToWorldNormal(v.normal);
 				float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
 				o.worldViewDir = UnityWorldSpaceViewDir(worldPos);

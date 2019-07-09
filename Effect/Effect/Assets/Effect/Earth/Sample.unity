@@ -357,6 +357,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -504,6 +505,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -548,6 +550,7 @@ GameObject:
   - component: {fileID: 1279170687}
   - component: {fileID: 1279170686}
   - component: {fileID: 1279170689}
+  - component: {fileID: 1279170690}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -635,8 +638,25 @@ MonoBehaviour:
   target: {fileID: 864086657}
   Speed: 1
   DistanceUp: 0
-  DistanceAway: 40
+  DistanceAway: 30
   BasePos: {x: 0, y: 0, z: 0}
   NewRotate: {x: 0, y: 0, z: 0}
   RotateMin: {x: -360, y: -360, z: -360}
   RotateMax: {x: 360, y: 360, z: 360}
+--- !u!114 &1279170690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279170685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15b117123e2de564ca8e8a627db2f76a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Material: {fileID: 2100000, guid: fd1e2eb78ca926f41abcfcf4bf3a97e0, type: 2}
+  Iterations: 4
+  BlurSpread: 0.2
+  DownSample: 8
+  LuminanceThreshold: 0
