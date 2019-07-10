@@ -96,7 +96,7 @@ Material:
     - _SrcBlend: 1
     - _TransitionWidth: 0.25
     - _UVSec: 0
-    - _ViewPower: 20
+    - _ViewPower: 10
     - _ZWrite: 1
     m_Colors:
     - _AtmosphereColor: {r: 0.6207725, g: 0.82377994, b: 0.8773585, a: 1}
