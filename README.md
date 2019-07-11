@@ -1,6 +1,10 @@
 # Unity Shader
 * 需要更系統的管理
 
+## Earth
+* 還有很多方法可以試
+![image](https://github.com/anohis/UnityShader/blob/master/Image/GW2GS.jpg)
+
 ## GW2GS
 嘗試模擬GW2的武器Twilight效果
 ![image](https://github.com/anohis/UnityShader/blob/master/Image/GW2GS.jpg)
