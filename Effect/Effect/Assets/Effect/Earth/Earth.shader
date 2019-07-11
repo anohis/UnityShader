@@ -1,8 +1,8 @@
 Shader "Custom/Earth"
 {
     Properties
-    {
-		_Color("Color", Color) = (1, 1, 1, 1) 
+	{
+		_Color("Color", Color) = (1, 1, 1, 1)
 		_MainTex("Texture", 2D) = "white" {}
 		_BumpMap("Normap Map", 2D) = "bump" {}
 		_BumpScale("Bump Scale", Float) = 1.0
@@ -11,8 +11,10 @@ Shader "Custom/Earth"
 		_NightMap("Night Map", 2D) = "white" {}
 		_NightColor("NightColor", Color) = (1, 1, 1, 1)
 		_CloudMap("Cloud Map", 2D) = "white" {}
+		_NightBlurCenterWeight("NightBlurCenterWeight",Range(0,1)) = 1
+		_NightBlurScale("NightBlurScale",Float) = 1
 		_TransitionWidth("Transition Width", Range(0.1, 0.5)) = 0.15
-    }
+	}
     SubShader
     {
         Pass
@@ -33,11 +35,14 @@ Shader "Custom/Earth"
 			sampler2D _BumpMap;
 			sampler2D _HeightMap;
 			sampler2D _NightMap;
+			half4 _NightMap_TexelSize;
 			sampler2D _CloudMap;
 			float _BumpScale;
 			float _HeightScale;
 			float _TransitionWidth;
 			fixed4 _NightColor;
+			float _NightBlurCenterWeight;
+			float _NightBlurScale;
 
             struct appdata
             {
@@ -79,6 +84,19 @@ Shader "Custom/Earth"
                 return o;
             }
 
+			fixed3 NightBlur(float NLFactor, float2 uv)
+			{
+				fixed3 night = _NightColor * max(0, -(NLFactor - (0.5 - 0.5 * _TransitionWidth)) / (0.5 - 0.5 * _TransitionWidth)) * tex2D(_NightMap, uv).rgb;
+				fixed3 blur = night * _NightBlurCenterWeight;
+				float blurWeight = (1 - _NightBlurCenterWeight) / 4;
+				blur += tex2D(_NightMap, uv + float2(0, _NightMap_TexelSize.y) * _NightBlurScale) * blurWeight;
+				blur += tex2D(_NightMap, uv - float2(0, _NightMap_TexelSize.y) * _NightBlurScale) * blurWeight;
+				blur += tex2D(_NightMap, uv + float2(_NightMap_TexelSize.x, 0) * _NightBlurScale) * blurWeight;
+				blur += tex2D(_NightMap, uv - float2(_NightMap_TexelSize.x, 0) * _NightBlurScale) * blurWeight;
+
+				return blur;
+			}
+
             fixed4 frag (v2f i) : SV_Target
 			{
 				float3 worldPos = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
@@ -101,8 +119,8 @@ Shader "Custom/Earth"
 				
 				fixed3 diffuse = NLFactor * tex2D(_MainTex, i.uv + parallaxOffset).rgb;
 				fixed3 night = _NightColor * max(0, -(NLFactor - (0.5 - 0.5 * _TransitionWidth)) / (0.5 - 0.5 * _TransitionWidth)) * tex2D(_NightMap, i.uv + parallaxOffset).rgb;
-				fixed3 cloud = min(1,0.1 + NLFactor) * tex2D(_CloudMap, i.uv);
-
+				fixed3 cloud = min(1,0.1 + Luminance(NightBlur(NLFactor, i.uv + parallaxOffset)) + NLFactor) * tex2D(_CloudMap, i.uv);
+				
 				fixed4 color = fixed4(diffuse + night + cloud, 1.0);
 
 				return color;
