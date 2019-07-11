@@ -16,7 +16,7 @@ namespace Effect.Earth
         [Range(0, 3)] public int DownSample = 1;
         [Range(1, 3)] public int BlurIteration = 2;
         [Range(0, 10)] public float SamplerScale = 10.0f;
-        [Range(1, 10)] public float LightAttenuation = 0.5f;
+        [Range(0, 10)] public float LightAttenuation = 0.5f;
         [Range(0, 1)] public float LuminanceThreshold = 0.5f;
         [Range(1, 4)] public float LuminancePower = 1f;
 

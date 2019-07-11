@@ -357,7 +357,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -491,7 +490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 864086657}
   Axis: {x: 0, y: 1, z: 0}
-  Speed: 25
+  Speed: 5
 --- !u!23 &882487995
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -506,7 +505,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -553,6 +551,7 @@ GameObject:
   - component: {fileID: 1279170689}
   - component: {fileID: 1279170690}
   - component: {fileID: 1279170691}
+  - component: {fileID: 1279170692}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -632,7 +631,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1279170685}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 12c5729aaf6277b4b9caf0f895cf8e29, type: 3}
   m_Name: 
@@ -682,6 +681,21 @@ MonoBehaviour:
   DownSample: 3
   BlurIteration: 3
   SamplerScale: 10
-  LightAttenuation: 1
+  LightAttenuation: 10
   LuminanceThreshold: 1
   LuminancePower: 1
+--- !u!114 &1279170692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279170685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed1a0aeae6e330e43a1be8e15a2a85ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: {fileID: 864086657}
+  Axis: {x: 1, y: 1, z: 0}
+  Speed: -5

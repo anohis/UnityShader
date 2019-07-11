@@ -88,6 +88,8 @@ Material:
     - _HeightScale: 0.01
     - _Metallic: 0
     - _Mode: 0
+    - _NightBlurCenterWeight: 0
+    - _NightBlurScale: 10
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _RimPower: 0.1

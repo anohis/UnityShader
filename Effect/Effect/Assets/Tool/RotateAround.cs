@@ -10,6 +10,6 @@ public class RotateAround : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.RotateAround(Target.position, Axis, Speed * Time.deltaTime);
+        transform.RotateAround(Target.position, Axis.normalized, Speed * Time.deltaTime);
     }
 }

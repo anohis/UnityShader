@@ -116,12 +116,12 @@ Shader "Custom/Earth"
 
 				float angleNL = acos(dot(worldLightDir, newNormalDir)) / PI;
 				float NLFactor = max(0, 1 - angleNL - (0.5 - 0.5 * _TransitionWidth)) / (1 - 0.5 * _TransitionWidth);
-				
+
 				fixed3 diffuse = NLFactor * tex2D(_MainTex, i.uv + parallaxOffset).rgb;
 				fixed3 night = _NightColor * max(0, -(NLFactor - (0.5 - 0.5 * _TransitionWidth)) / (0.5 - 0.5 * _TransitionWidth)) * tex2D(_NightMap, i.uv + parallaxOffset).rgb;
-				fixed3 cloud = min(1,0.1 + Luminance(NightBlur(NLFactor, i.uv + parallaxOffset)) + NLFactor) * tex2D(_CloudMap, i.uv);
-				
-				fixed4 color = fixed4(diffuse + night + cloud, 1.0);
+				fixed4 cloud = max(0.3, min(1, NLFactor)) * tex2D(_CloudMap, i.uv);
+
+				fixed4 color = fixed4((1 - cloud.a) * (diffuse + night) + cloud.a * cloud.rbg , 1.0);
 
 				return color;
 			}

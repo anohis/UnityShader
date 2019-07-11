@@ -25,5 +25,5 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _TransitionWidth: 0.25
-    - _ViewPower: 10
+    - _ViewPower: 30
     m_Colors: []
