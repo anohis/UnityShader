@@ -1,4 +1,4 @@
-﻿Shader "Custom/GodRay"
+Shader "Custom/GodRay"
 {
 	Properties
 	{
@@ -162,7 +162,7 @@
 			{
 				fixed4 ori = tex2D(_MainTex, i.uv);
 				fixed4 blur = tex2D(_BlurTex, i.uv);
-				return blur  *_LightColor;
+				return blur * _LightColor + ori;
 			}
 			ENDCG
 		}

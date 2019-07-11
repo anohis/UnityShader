@@ -9,6 +9,7 @@ Shader "Custom/Earth"
 		_HeightMap("Height Map", 2D) = "white" {}
 		_HeightScale("Height Scale", float) = 0
 		_NightMap("Night Map", 2D) = "white" {}
+		_NightColor("NightColor", Color) = (1, 1, 1, 1)
 		_CloudMap("Cloud Map", 2D) = "white" {}
 		_TransitionWidth("Transition Width", Range(0.1, 0.5)) = 0.15
     }
@@ -36,6 +37,7 @@ Shader "Custom/Earth"
 			float _BumpScale;
 			float _HeightScale;
 			float _TransitionWidth;
+			fixed4 _NightColor;
 
             struct appdata
             {
@@ -98,9 +100,8 @@ Shader "Custom/Earth"
 				float NLFactor = max(0, 1 - angleNL - (0.5 - 0.5 * _TransitionWidth)) / (1 - 0.5 * _TransitionWidth);
 				
 				fixed3 diffuse = NLFactor * tex2D(_MainTex, i.uv + parallaxOffset).rgb;
-				fixed3 cloud = tex2D(_CloudMap, i.uv);
-				fixed3 night = max(0, -(NLFactor - (0.5 - 0.5 * _TransitionWidth)) / (0.5 - 0.5 * _TransitionWidth)) * (1 - cloud.r) * tex2D(_NightMap, i.uv + parallaxOffset).rgb;
-				cloud *= NLFactor;
+				fixed3 night = _NightColor * max(0, -(NLFactor - (0.5 - 0.5 * _TransitionWidth)) / (0.5 - 0.5 * _TransitionWidth)) * tex2D(_NightMap, i.uv + parallaxOffset).rgb;
+				fixed3 cloud = min(1,0.1 + NLFactor) * tex2D(_CloudMap, i.uv);
 
 				fixed4 color = fixed4(diffuse + night + cloud, 1.0);
 
