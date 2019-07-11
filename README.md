@@ -3,7 +3,7 @@
 
 ## Earth
 * 還有很多方法可以試
-![image](https://github.com/anohis/UnityShader/blob/master/Image/GW2GS.jpg)
+![image](https://github.com/anohis/UnityShader/blob/master/Image/Earth.PNG)
 
 ## GW2GS
 嘗試模擬GW2的武器Twilight效果
