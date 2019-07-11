@@ -97,6 +97,7 @@
     <None Include="Assets\Effect\Dissolving\Dissolving.shader" />
     <None Include="Assets\Effect\Earth\GodRay.shader" />
     <None Include="Assets\Hsv.cginc" />
+    <None Include="Assets\Effect\Earth\Atmosphere.shader" />
     <None Include="Assets\Effect\Block\Blocking.shader" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_fuku_ds.shader" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_eyelash_blend.shader" />

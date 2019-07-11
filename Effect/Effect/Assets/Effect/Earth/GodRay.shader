@@ -1,141 +1,13 @@
 ﻿Shader "Custom/GodRay"
 {
-
-
-	Properties{
-		_MainTex("Base (RGB)", 2D) = "white" {}
-		_BlurTex("Blur", 2D) = "white"{}
-		_MaskTexture("Mask", 2D) = "white"{}
+	Properties
+	{
+		_MainTex("Main Tex", 2D) = "white" {}
+		_MaskTex("Mask Tex", 2D) = "white" {}
+		_RadialSampleCount("Radial Sample Count", Float) = 6
 	}
-
-		CGINCLUDE
-#define RADIAL_SAMPLE_COUNT 6
-#include "UnityCG.cginc"
-
-		//用于阈值提取高亮部分
-		struct v2f_threshold
+	SubShader
 	{
-		float4 pos : SV_POSITION;
-		float2 uv : TEXCOORD0;
-	};
-
-	//用于blur
-	struct v2f_blur
-	{
-		float4 pos : SV_POSITION;
-		float2 uv  : TEXCOORD0;
-		float2 blurOffset : TEXCOORD1;
-	};
-
-	//用于最终融合
-	struct v2f_merge
-	{
-		float4 pos : SV_POSITION;
-		float2 uv  : TEXCOORD0;
-		float2 uv1 : TEXCOORD1;
-	};
-
-	sampler2D _MaskTexture;
-	sampler2D _MainTex;
-	float4 _MainTex_TexelSize;
-	sampler2D _BlurTex;
-	float4 _BlurTex_TexelSize;
-	float4 _ViewPortLightPos;
-
-	float4 _offsets;
-	float4 _ColorThreshold;
-	float4 _LightColor;
-	float _LightFactor;
-	float _PowFactor;
-	float _LightRadius;
-
-	//高亮部分提取shader
-	v2f_threshold vert_threshold(appdata_img v)
-	{
-		v2f_threshold o;
-		o.pos = UnityObjectToClipPos(v.vertex);
-		o.uv = v.texcoord.xy;
-
-		//dx中纹理从左上角为初始坐标，需要反向
-#if UNITY_UV_STARTS_AT_TOP
-		if (_MainTex_TexelSize.y < 0)
-			o.uv.y = 1 - o.uv.y;
-#endif	
-		return o;
-	}
-
-	fixed4 frag_threshold(v2f_threshold i) : SV_Target
-	{
-		fixed4 color = tex2D(_MainTex, i.uv);
-		float distFromLight = length(_ViewPortLightPos.xy - i.uv);
-		float distanceControl = saturate(_LightRadius - distFromLight);
-		//仅当color大于设置的阈值的时候才输出
-		float4 thresholdColor = saturate(color - _ColorThreshold) * distanceControl;
-		float luminanceColor = Luminance(thresholdColor.rgb);
-		luminanceColor = pow(luminanceColor, _PowFactor);
-		//采样深度贴图
-		float depth = tex2D(_MaskTexture, i.uv);
-		//转换回01区间
-		depth = Linear01Depth(depth);
-		//将深度小于阈值的部分直接变为0作为系数乘原来的结果，剃掉近处的内容
-		luminanceColor *= depth;
-		return fixed4(luminanceColor, luminanceColor, luminanceColor, 1);
-	}
-
-		//径向模糊 vert shader
-		v2f_blur vert_blur(appdata_img v)
-	{
-		v2f_blur o;
-		o.pos = UnityObjectToClipPos(v.vertex);
-		o.uv = v.texcoord.xy;
-		//径向模糊采样偏移值*沿光的方向权重
-		o.blurOffset = _offsets * (_ViewPortLightPos.xy - o.uv);
-		return o;
-	}
-
-	//径向模拟pixel shader
-	fixed4 frag_blur(v2f_blur i) : SV_Target
-	{
-		half4 color = half4(0,0,0,0);
-		for (int j = 0; j < RADIAL_SAMPLE_COUNT; j++)
-		{
-			color += tex2D(_MainTex, i.uv.xy);
-			i.uv.xy += i.blurOffset;
-		}
-
-		return color / RADIAL_SAMPLE_COUNT;
-	}
-
-		//融合vertex shader
-		v2f_merge vert_merge(appdata_img v)
-	{
-		v2f_merge o;
-		//mvp矩阵变换
-		o.pos = UnityObjectToClipPos(v.vertex);
-		//uv坐标传递
-		o.uv.xy = v.texcoord.xy;
-		o.uv1.xy = o.uv.xy;
-#if UNITY_UV_STARTS_AT_TOP
-		if (_MainTex_TexelSize.y < 0)
-			o.uv.y = 1 - o.uv.y;
-#endif	
-		return o;
-	}
-
-	fixed4 frag_merge(v2f_merge i) : SV_Target
-	{
-		fixed4 ori = tex2D(_MainTex, i.uv1);
-		fixed4 blur = tex2D(_BlurTex, i.uv);
-		//输出= 原始图像，叠加体积光贴图
-		fixed4 lightColor = _LightFactor * blur * _LightColor;
-		return lightColor + ori;
-	}
-
-		ENDCG
-
-		SubShader
-	{
-		//pass 0: 提取高亮部分
 		Pass
 		{
 			ZTest Off
@@ -144,13 +16,57 @@
 			Fog{ Mode Off }
 
 			CGPROGRAM
-			#pragma vertex vert_threshold
-			#pragma fragment frag_threshold
+			#pragma vertex vert
+			#pragma fragment frag
+
+			#include "UnityCG.cginc"
+
+			sampler2D _MainTex;
+			sampler2D _MaskTex;
+			float4 _ViewPortLightPos;
+			float _LightAttenuation;
+			float _LuminancePower;
+			float _LuminanceThreshold;
+
+			struct appdata
+			{
+				float4 vertex : POSITION;
+				float2 uv : TEXCOORD0;
+			};
+
+			struct v2f
+			{
+				float4 pos : SV_POSITION;
+				float2 uv : TEXCOORD0;
+			};
+
+			v2f vert(appdata v)
+			{
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+				o.uv = v.uv;
+				return o;
+			}
+
+			fixed4 frag(v2f i) : SV_Target
+			{
+				fixed4 color = tex2D(_MainTex, i.uv);
+				float depth = tex2D(_MaskTex, i.uv);
+
+				float disFromLight = 1 - saturate(length(_ViewPortLightPos.xy - i.uv) / pow(2, 0.5));
+				float disFactor = pow(disFromLight, _LightAttenuation);
+
+				float luminance = Luminance(color.rgb);
+				luminance = saturate(luminance * sign(luminance - _LuminanceThreshold));
+				//luminance = pow(luminance, _LuminancePower);
+				luminance *= depth * disFactor;
+
+				return fixed4(luminance, luminance, luminance, 1);
+			}
 			ENDCG
 		}
 
-			//pass 1: 径向模糊
-			Pass
+		Pass
 		{
 			ZTest Off
 			Cull Off
@@ -158,23 +74,96 @@
 			Fog{ Mode Off }
 
 			CGPROGRAM
-			#pragma vertex vert_blur
-			#pragma fragment frag_blur
-			ENDCG
+			#pragma vertex vert
+			#pragma fragment frag
+
+			#include "UnityCG.cginc"
+
+			sampler2D _MainTex;
+			float _RadialSampleCount;
+			float4 _ViewPortLightPos;
+			float4 _BlurOffsetScale;
+
+			struct appdata
+			{
+				float4 vertex : POSITION;
+				float2 uv : TEXCOORD0;
+			};
+
+			struct v2f
+			{
+				float4 pos : SV_POSITION;
+				float2 uv : TEXCOORD0;
+				float2 blurOffset : TEXCOORD1;
+			};
+
+			v2f vert(appdata v)
+			{
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+				o.uv = v.uv;
+				o.blurOffset = _BlurOffsetScale * (_ViewPortLightPos.xy - o.uv);
+				return o;
+			}
+
+			fixed4 frag(v2f i) : SV_Target
+			{
+				half4 color = half4(0,0,0,0);
+				for (int j = 0; j < _RadialSampleCount; j++)
+				{
+					color += tex2D(_MainTex, i.uv.xy);
+					i.uv.xy += i.blurOffset;
+				}
+
+				return color / _RadialSampleCount;
+			}
+
+				ENDCG
 		}
 
-			//pass 2: 将体积光模糊图与原图融合
-			Pass
+		Pass
 		{
-
 			ZTest Off
 			Cull Off
 			ZWrite Off
 			Fog{ Mode Off }
 
 			CGPROGRAM
-			#pragma vertex vert_merge
-			#pragma fragment frag_merge
+			#pragma vertex vert
+			#pragma fragment frag
+
+			#include "UnityCG.cginc"
+
+			sampler2D _MainTex;
+			sampler2D _BlurTex;
+			fixed4 _LightColor;
+
+			struct appdata
+			{
+				float4 vertex : POSITION;
+				float2 uv : TEXCOORD0;
+			};
+
+			struct v2f
+			{
+				float4 pos : SV_POSITION;
+				float2 uv : TEXCOORD0;
+			};
+
+			v2f vert(appdata v)
+			{
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+				o.uv.xy = v.uv;
+				return o;
+			}
+
+			fixed4 frag(v2f i) : SV_Target
+			{
+				fixed4 ori = tex2D(_MainTex, i.uv);
+				fixed4 blur = tex2D(_BlurTex, i.uv);
+				return blur  *_LightColor;
+			}
 			ENDCG
 		}
 	}
