@@ -13,7 +13,8 @@ Shader "Custom/Atmosphere"
 			Tags{ "LightMode" = "ForwardBase" }
 			Cull Back
 			Zwrite Off
-			Blend SrcAlpha OneMinusSrcAlpha
+			//Blend SrcAlpha OneMinusSrcAlpha
+			Blend one one
 
 			CGPROGRAM
 			#include "Lighting.cginc" 

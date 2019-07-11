@@ -13,6 +13,7 @@ Shader "Custom/Earth"
 		_CloudMap("Cloud Map", 2D) = "white" {}
 		_NightBlurCenterWeight("NightBlurCenterWeight",Range(0,1)) = 1
 		_NightBlurScale("NightBlurScale",Float) = 1
+		_OceanMask("OceanMask",2D) = "white" {}
 		_TransitionWidth("Transition Width", Range(0.1, 0.5)) = 0.15
 	}
     SubShader
@@ -43,6 +44,7 @@ Shader "Custom/Earth"
 			fixed4 _NightColor;
 			float _NightBlurCenterWeight;
 			float _NightBlurScale;
+			sampler2D _OceanMask;
 
             struct appdata
             {
@@ -106,7 +108,8 @@ Shader "Custom/Earth"
 
 				fixed3 tangentViewDir = normalize(i.viewDir);
 
-				float height = tex2D(_HeightMap, i.uv);
+				float oceanMask = tex2D(_OceanMask, i.uv).r;
+				float height = tex2D(_HeightMap, i.uv) + 0.1 * oceanMask;
 				float2 parallaxOffset = ParallaxOffset(height, _HeightScale, tangentViewDir);
 
 				fixed3 newNormalDir = UnpackNormal(tex2D(_BumpMap, i.uv + parallaxOffset));
