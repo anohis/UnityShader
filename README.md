@@ -2,7 +2,12 @@
 * 需要更系統的管理
 
 ## Earth
-* 還有很多方法可以試
+模擬地球、大氣等
+* 地表+雲+夜晚導致部分地方過亮
+* 雲沒有表現出體積與陰影
+* 雲在夜晚應該依照地表燈明變化
+* 大氣與地表亮度是個別算出來的，調整參數讓兩者搭配不那麼突兀
+* 大氣顏色變化是查表而非光照計算
 ![image](https://github.com/anohis/UnityShader/blob/master/Image/Earth.PNG)
 
 ## GW2GS
